@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Find Hospitals | HealthCare</title>
+  <link rel="stylesheet" href="styles_Hospital.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css">
+  
+</head>
+<body>
+  <header>
+    <div class="nav-top">
+      <div class="left">
+        <div class="logo">
+          <img src="https://img.icons8.com/ios-filled/50/ffffff/heart-with-pulse.png" alt="Logo" />
+          <span>HealthCare</span>
+        </div>
+        <div id="locationSection" class="location" tabindex="0" aria-label="User location">
+            <img src="https://img.icons8.com/ios-filled/24/ffffff/marker.png" alt="Location" />
+            <span id="locationText">College City</span>
+          </div>
+      </div>
+      <div class="right">
+        <div class="offer-logo">
+          <img src="https://img.icons8.com/ios-filled/24/ffffff/sale.png" alt="Offer" />
+          <span>Special Offer</span>
+        </div>
+        <div class="login" tabindex="0" role="button" aria-label="Login page" onclick="window.open('login.html', '_blank')" onkeypress="if(event.key==='Enter' || event.key===' ') window.open('login.html', '_blank')">Log In</div>
+      </div>
+    </div>
+    <nav class="nav-bottom" aria-label="Primary">
+       <a href="indexMainpage.Html">Home</a>
+      <a href="Find_Doctor.html">Doctor</a>
+      <a href="Find_Hospital.html">Hospital</a>
+      <a href="medicine.html">Medicine</a>
+      <a href="emergency.html">Emergency</a>
+    </nav>
+  </header>
+
+  <main class="hospital-page-container">
+    <div class="hospital-search-header">
+      <h1>Find Hospitals Near You</h1>
+      <p>Discover top-rated healthcare facilities in your area with real-time availability and wait times</p>
+    </div>
+    
+    <div class="search-filters">
+      <form id="hospitalSearchForm" onsubmit="event.preventDefault();">
+        <div class="filter-row">
+          <div class="filter-group">
+            <label for="hospitalType"><i class="fas fa-hospital"></i> Hospital Type</label>
+            <select id="hospitalType">
+              <option value="">All Types</option>
+              <option value="General">General Hospital</option>
+              <option value="Specialty">Specialty Hospital</option>
+              <option value="Children">Children's Hospital</option>
+              <option value="Maternity">Maternity Hospital</option>
+              <option value="Psychiatric">Psychiatric Hospital</option>
+              <option value="Rehabilitation">Rehabilitation Center</option>
+              <option value="Urgent Care">Urgent Care Center</option>
+              <option value="Clinic">Clinic</option>
+            </select>
+          </div>
+          
+          <div class="filter-group">
+            <label for="services"><i class="fas fa-procedures"></i> Services</label>
+            <select id="services">
+              <option value="">All Services</option>
+              <option value="Emergency">Emergency Care</option>
+              <option value="Surgery">Surgery</option>
+              <option value="Maternity">Maternity</option>
+              <option value="Pediatrics">Pediatrics</option>
+              <option value="Cardiology">Cardiology</option>
+              <option value="Orthopedics">Orthopedics</option>
+              <option value="Neurology">Neurology</option>
+              <option value="Oncology">Oncology</option>
+              <option value="Radiology">Radiology</option>
+              <option value="Physical Therapy">Physical Therapy</option>
+              <option value="Mental Health">Mental Health Services</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="filter-row">
+          <div class="filter-group">
+            <label for="distance"><i class="fas fa-map-marker-alt"></i> Distance</label>
+            <select id="distance">
+              <option value="5">Within 5 km</option>
+              <option value="10">Within 10 km</option>
+              <option value="25">Within 25 km</option>
+              <option value="50">Within 50 km</option>
+              <option value="75">Within 75 km</option>
+              <option value="100">Within 100 km</option>
+            </select>
+          </div>
+          
+          <div class="filter-group">
+            <label for="sortBy"><i class="fas fa-sort"></i> Sort By</label>
+            <select id="sortBy">
+              <option value="distance">Distance (Nearest First)</option>
+              <option value="rating">Highest Rated</option>
+              <option value="waitTime">Shortest Wait Time</option>
+            </select>
+          </div>
+        </div>
+        
+        <button type="submit" class="search-button">
+          <i class="fas fa-search"></i> Search Hospitals
+        </button>
+      </form>
+    </div>
+    
+    <div class="results-header">
+      <div class="results-count">
+        <i class="fas fa-map-marker-alt"></i> Showing <strong>12</strong> hospitals near <strong>Your Location</strong>
+      </div>
+      <div class="view-options">
+        <div class="view-option active" data-view="grid"><i class="fas fa-th"></i></div>
+        <div class="view-option" data-view="list"><i class="fas fa-list"></i></div>
+        <div class="view-option" data-view="map"><i class="fas fa-map"></i></div>
+      </div>
+    </div>
+
+    <div class="hospitals-grid" id="hospitalsGrid">
+      <!-- Sample Hospital Card 1 -->
+      <div class="hospital-card">
+        <span class="hospital-badge">General Hospital</span>
+        <div class="hospital-image" style="background-image: url('https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80')"></div>
+        <div class="hospital-info">
+          <h3 class="hospital-name">City General Hospital</h3>
+          <div class="hospital-meta">
+            <div class="hospital-distance">
+              <i class="fas fa-location-arrow"></i> 2.5 km away
+            </div>
+            <div class="hospital-wait-time">
+              <i class="fas fa-clock"></i> 15 min wait
+            </div>
+          </div>
+          <div class="hospital-services">
+            <span class="service-tag">Emergency</span>
+            <span class="service-tag">Surgery</span>
+            <span class="service-tag">Maternity</span>
+          </div>
+          <div class="hospital-actions">
+            <button class="action-btn directions-btn">
+              <i class="fas fa-directions"></i> Directions
+            </button>
+            <button class="action-btn contact-btn">
+              <i class="fas fa-phone-alt"></i> Contact
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Sample Hospital Card 2 -->
+      <div class="hospital-card">
+        <span class="hospital-badge">Children's Hospital</span>
+        <div class="hospital-image" style="background-image: url('https://images.unsplash.com/photo-1581595219315-a187dd40c322?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80')"></div>
+        <div class="hospital-info">
+          <h3 class="hospital-name">Children's Medical Center</h3>
+          <div class="hospital-meta">
+            <div class="hospital-distance">
+              <i class="fas fa-location-arrow"></i> 4.1 km away
+            </div>
+            <div class="hospital-wait-time">
+              <i class="fas fa-clock"></i> 25 min wait
+            </div>
+          </div>
+          <div class="hospital-services">
+            <span class="service-tag">Pediatrics</span>
+            <span class="service-tag">Emergency</span>
+            <span class="service-tag">Vaccination</span>
+          </div>
+          <div class="hospital-actions">
+            <button class="action-btn directions-btn">
+              <i class="fas fa-directions"></i> Directions
+            </button>
+            <button class="action-btn contact-btn">
+              <i class="fas fa-phone-alt"></i> Contact
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- More hospital cards would be dynamically inserted here -->
+    </div>
+
+    <div class="map-container" id="hospitalMapContainer">
+      <div id="hospitalMap"></div>
+      <div class="map-toggle">
+        <i class="fas fa-layer-group"></i> Map Layers
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2024 Healthcare Website. All rights reserved.</p>
+  </footer>
+
+  <!-- [Your existing footer remains the same] -->
+<script src="script_Hospital.js"></script>
+</body>
+</html>
