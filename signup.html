@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign Up | HealthCare</title>
+  <link rel="stylesheet" href="styles_Main.css">
+  <link rel="stylesheet" href="styles_Signup.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <main class="doctor-page-container">
+    <h1 class="section-title">Create an Account</h1>
+    <div class="doctor-search-container">
+      <form class="signup-form" id="signupForm">
+        <label for="username">Username</label>
+        <input type="text" id="username" required>
+        <label for="email">Email</label>
+        <input type="email" id="email" required>
+        <label for="password">Password</label>
+        <div class="password-field">
+          <input type="password" id="password" required>
+          <span toggle="#password" class="fas fa-eye toggle-password"></span>
+        </div>
+        <label for="confirm-password">Confirm Password</label>
+        <div class="password-field">
+          <input type="password" id="confirm-password" required>
+          <span toggle="#confirm-password" class="fas fa-eye toggle-password"></span>
+        </div>
+        <button type="submit" class="search-button">Sign Up</button>
+      </form>
+      <p style="text-align:center; margin-top: 1rem;">
+        Already have an account? <a href="login.html">Log In</a>
+      </p>
+    </div>
+    <script>
+  document.getElementById('signupForm').addEventListener('submit', function(e) {
+    e.preventDefault(); // stop actual form submission
+    // You could add validation here
+    window.location.href = 'indexMainpage.html'; // redirect to home page
+  });
+</script>
+  </main>
+  <script>
+    const toggleIcons = document.querySelectorAll('.toggle-password');
+    toggleIcons.forEach(icon => {
+      icon.addEventListener('click', () => {
+        const input = document.querySelector(icon.getAttribute('toggle'));
+        if (input.type === 'password') {
+          input.type = 'text';
+          icon.classList.remove('fa-eye');
+          icon.classList.add('fa-eye-slash');
+        } else {
+          input.type = 'password';
+          icon.classList.remove('fa-eye-slash');
+          icon.classList.add('fa-eye');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
