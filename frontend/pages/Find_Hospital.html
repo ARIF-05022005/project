@@ -7,13 +7,21 @@
   <link rel="stylesheet" href="../css/styles_Hospital.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css">
-  
+  <script type="module">
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+  const auth = window.firebase.auth;
+  onAuthStateChanged(auth, user => {
+    if (!user) {
+      window.location.href = "../login.html";
+    }
+  });
+</script>
 </head>
 <body>
   <header>
     <div class="nav-top">
       <div class="left">
-        <a href="indexMainpage.html" class="logo">
+        <a href="../indexMainpage.html" class="logo">
   <img src="https://img.icons8.com/ios-filled/50/ffffff/heart-with-pulse.png" alt="Logo" />
   <span>HealthCare</span>
 </a>
@@ -27,16 +35,19 @@
   <img src="https://img.icons8.com/ios-filled/24/ffffff/sale.png" alt="Offer" />
   <span>Special Offer</span>
 </a>
-        <div class="login" tabindex="0" role="button" aria-label="Login page" onclick="window.open('login.html', '_blank')" onkeypress="if(event.key==='Enter' || event.key===' ') window.open('login.html', '_blank')">Log In</div>
+        <div class="login" tabindex="0" role="button" aria-label="Login page" onclick="window.open('login.html', '_blank')" onkeypress="if(event.key==='Enter' || event.key===' ') window.open('login.html', '_blank')">Log Out</div>
       </div>
     </div>
+    <!-- frontend/pages/Find_Hospital.html -->
     <nav class="nav-bottom" aria-label="Primary">
-       <a href="indexMainpage.Html">Home</a>
+      <a href="../indexMainpage.html">Home</a>
       <a href="Find_Doctor.html">Doctor</a>
-      <a href="Find_Hospital.html">Hospital</a>
+      <a href="Find_Hospital.html" aria-current="page">Hospital</a>
       <a href="medicine.html">Medicine</a>
+      <a href="lab_test.html">Lab Test</a>
       <a href="emergency.html">Emergency</a>
     </nav>
+
   </header>
 
   <main class="hospital-page-container">

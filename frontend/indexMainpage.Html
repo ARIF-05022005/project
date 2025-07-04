@@ -12,6 +12,16 @@
   integrity="sha512-mD70nAW2ThLsWH0zif8JPbfraZ8hbCtjQ+5RU1m4+ztZq6/MymyZeB55pWsi4YAX+73yvcaJyk61mzfYMvtm9w=="
   crossorigin=""
 />
+<script type="module">
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+  const auth = window.firebase.auth;
+  onAuthStateChanged(auth, user => {
+    if (!user) {
+      window.location.href = "../login.html";
+    }
+  });
+</script>
+
 </head>
 <body>
   <header>
@@ -27,20 +37,21 @@
         </div>
       </div>
       <div class="right">
-        <a href="Special_Offer.html" class="offer-logo" tabindex="0" aria-label="Special Offer page">
-  <img src="https://img.icons8.com/ios-filled/24/ffffff/sale.png" alt="Offer" />
-  <span>Special Offer</span>
-</a>
-
-        <div class="login" tabindex="0" role="link" aria-label="Login page" onclick="window.open('login.html', '_blank')" onkeypress="if(event.key==='Enter' || event.key===' ') window.open('login.html', '_blank')">Log In</div>
+        <a href="pages/Special_Offer.html" class="offer-logo" tabindex="0" aria-label="Special Offer page">
+          <img src="https://img.icons8.com/ios-filled/24/ffffff/sale.png" alt="Offer" />
+          <span>Special Offer</span>
+        </a>
+        <div class="login" tabindex="0" role="link" aria-label="Login page" 
+     onclick="window.location='login.html'" 
+     onkeypress="if(event.key==='Enter'||event.key===' ') window.location='login.html'">Log Out</div>
       </div>
     </div>
     <nav class="nav-bottom" aria-label="Primary">
       <a href="indexMainpage.html">Home</a>
-      <a href="Find_Doctor.html">Doctor</a>
-      <a href="Find_Hospital.html">Hospital</a>
-      <a href="medicine.html">Medicine</a>
-      <a href="emergency.html">Emergency</a>
+      <a href="pages/Find_Doctor.html">Doctor</a>
+      <a href="pages/Find_Hospital.html">Hospital</a>
+      <a href="pages/medicine.html">Medicine</a>
+      <a href="pages/emergency.html">Emergency</a>
     </nav>
   </header>
 
@@ -71,27 +82,27 @@
         <div class="carousel-item" tabindex="0">
           <h3>Consulting Doctor</h3>
           <p>Connect with experienced doctors for consultations easily.</p>
-          <a href="Find_Doctor.html">Learn More</a>
+          <a href="pages/Find_Doctor.html">Learn More</a>
         </div>
         <div class="carousel-item" tabindex="0">
           <h3>Find Hospital</h3>
           <p>Locate nearby hospitals and healthcare centers instantly.</p>
-          <a href="Find_Hospital.html">Learn More</a>
+          <a href="pages/Find_Hospital.html">Learn More</a>
         </div>
         <div class="carousel-item" tabindex="0">
           <h3>Find Medicine Shop</h3>
           <p>Get medicine from trusted shops near you quickly.</p>
-          <a href="medicine.html">Learn More</a> <!-- Should create medicine.html -->
+          <a href="pages/medicine.html">Learn More</a>
         </div>
         <div class="carousel-item" tabindex="0">
           <h3>Lab Test</h3>
           <p>Book lab tests online with verified labs in your area.</p>
-          <a href="lab_test.html">Learn More</a> <!-- Should create lab_test.html -->
+          <a href="pages/lab_test.html">Learn More</a>
         </div>
         <div class="carousel-item" tabindex="0">
           <h3>Want to be a Hero</h3>
           <p>Join our blood donor community and save lives.</p>
-          <a href="be_a_hero.html">Learn More</a> <!-- Should create be_a_hero.html -->
+          <a href="pages/be_a_hero.html">Learn More</a>
         </div>
       </div>
       <button class="carousel-btn next-btn" aria-label="Next">&#10095;</button>

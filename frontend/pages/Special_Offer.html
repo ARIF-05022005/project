@@ -6,36 +6,48 @@
   <title>Special Offers | HealthCare</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="../css/styles_Medicine.css"> <!-- reuse your CSS -->
+  <script type="module">
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+  const auth = window.firebase.auth;
+  onAuthStateChanged(auth, user => {
+    if (!user) {
+      window.location.href = "../login.html";
+    }
+  });
+</script>
+
 </head>
 <body>
   <header>
-    <div class="nav-top">
-      <div class="left">
-        <div class="logo">
-          <img src="https://img.icons8.com/ios-filled/50/ffffff/heart-with-pulse.png" alt="Logo" />
-          <span>HealthCare</span>
-        </div>
-        <div id="locationSection" class="location" tabindex="0" aria-label="User location">
-          <img src="https://img.icons8.com/ios-filled/24/ffffff/marker.png" alt="Location" />
-          <span id="locationText">Your Location</span>
-        </div>
-      </div>
-      <div class="right">
-        <div class="offer-logo" onclick="window.location='Special_Offer.html'" tabindex="0" role="link" aria-label="Special Offer page">
-          <img src="https://img.icons8.com/ios-filled/24/ffffff/sale.png" alt="Offer" />
-          <span>Special Offer</span>
-        </div>
-        <div class="login" tabindex="0" role="link" aria-label="Login page" onclick="window.location='login.html'">Log In</div>
+  <div class="nav-top">
+    <div class="left">
+      <a href="../indexMainpage.html" class="logo">
+        <img src="https://img.icons8.com/ios-filled/50/ffffff/heart-with-pulse.png" alt="Logo" />
+        <span>HealthCare</span>
+      </a>
+      <div id="locationSection" class="location" tabindex="0" aria-label="User location">
+        <img src="https://img.icons8.com/ios-filled/24/ffffff/marker.png" alt="Location" />
+        <span id="locationText">Your Location</span>
       </div>
     </div>
-    <nav class="nav-bottom" aria-label="Primary">
-      <a href="indexMainpage.Html">Home</a>
-      <a href="Find_Doctor.html">Doctor</a>
-      <a href="Find_Hospital.html">Hospital</a>
-      <a href="Find_Medicine.html">Medicine</a>
-      <a href="emergency.html">Emergency</a>
-    </nav>
-  </header>
+    <div class="right">
+      <a href="Special_Offer.html" class="offer-logo" tabindex="0" aria-label="Special Offer page" aria-current="page">
+        <img src="https://img.icons8.com/ios-filled/24/ffffff/sale.png" alt="Offer" />
+        <span>Special Offer</span>
+      </a>
+      <div class="login" tabindex="0" role="link" aria-label="Login page" onclick="window.location='../login.html'">Log Out</div>
+    </div>
+  </div>
+  <nav class="nav-bottom" aria-label="Primary">
+    <a href="../indexMainpage.html">Home</a>
+    <a href="Find_Doctor.html">Doctor</a>
+    <a href="Find_Hospital.html">Hospital</a>
+    <a href="medicine.html">Medicine</a>
+    <a href="lab_test.html">Lab Test</a>
+    <a href="emergency.html">Emergency</a>
+  </nav>
+</header>
+
 
   <main class="doctor-page-container">
     <h1 class="section-title">Special Offers</h1>

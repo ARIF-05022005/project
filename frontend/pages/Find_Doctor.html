@@ -6,12 +6,22 @@
   <title>Find a Doctor | HealthCare</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link rel="stylesheet" href="../css/styles_Doctor.css">
+  <script type="module">
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+  const auth = window.firebase.auth;
+  onAuthStateChanged(auth, user => {
+    if (!user) {
+      window.location.href = "../login.html";
+    }
+  });
+</script>
+
 </head>
 <body>
   <header>
     <div class="nav-top">
       <div class="left">
-        <a href="indexMainpage.html" class="logo" aria-label="Go to homepage">
+        <a href="../indexMainpage.html" class="logo">
           <img src="https://img.icons8.com/ios-filled/50/ffffff/heart-with-pulse.png" alt="HealthCare logo" />
           <span>HealthCare</span>
         </a>
@@ -25,16 +35,19 @@
   <img src="https://img.icons8.com/ios-filled/24/ffffff/sale.png" alt="Offer" />
   <span>Special Offer</span>
 </a>
-        <button class="login" aria-label="Log in to your account" onclick="window.location='login.html'">Log In</button>
+        <div class="login" tabindex="0" role="link" aria-label="Login page" onclick="window.location='../login.html'">Log Out</div>
       </div>
     </div>
+    <!-- frontend/pages/Find_Doctor.html -->
     <nav class="nav-bottom" aria-label="Main navigation">
-      <a href="indexMainpage.html">Home</a>
+      <a href="../indexMainpage.html">Home</a>
       <a href="Find_Doctor.html" aria-current="page">Doctor</a>
       <a href="Find_Hospital.html">Hospital</a>
       <a href="medicine.html">Medicine</a>
+      <a href="lab_test.html">Lab Test</a>
       <a href="emergency.html">Emergency</a>
     </nav>
+
   </header>
 
   <main class="doctor-page-container">

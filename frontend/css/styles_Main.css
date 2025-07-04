@@ -392,3 +392,26 @@ footer {
   .nav-bottom a { padding: 0.5rem 1rem; }
   .search-bar { max-width: 100%; }
 }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+main, .doctor-page-container, .hospital-page-container {
+  flex: 1;
+}
+

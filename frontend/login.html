@@ -2,59 +2,64 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Log In | HealthCare</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="css/styles_Login.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
   <header>
     <div class="nav-top">
-      <div class="left">
-        <div class="logo">
-          <img src="https://img.icons8.com/ios-filled/50/ffffff/heart-with-pulse.png" alt="Logo" />
-          <span>HealthCare</span>
+      <div class="logo">
+        <img src="https://img.icons8.com/ios-filled/50/ffffff/heart-with-pulse.png" alt="Logo">
+        <span>HealthCare</span>
       </div>
     </div>
   </header>
+
   <main class="login-page-container">
     <h1 class="section-title">Log In to Your Account</h1>
-    <form class="login-form" id="loginForm">
+    <form class="login-form" id="login-form">
       <div class="form-group">
-        <label for="email"><i class="fas fa-envelope"></i> Email</label>
-        <input type="email" id="email" name="email" placeholder="you@example.com" required>
+        <label for="login-email"><i class="fas fa-envelope"></i> Email</label>
+        <input type="email" id="login-email" required>
       </div>
       <div class="form-group">
-        <label for="password"><i class="fas fa-lock"></i> Password</label>
-        <div class="password-wrapper">
-  <div class="password-field">
-  <input type="password" id="loginPassword" name="password" placeholder="Password" required>
-  <i class="fas fa-eye toggle-password" onclick="togglePassword('loginPassword', this)"></i>
-  </div>
-</div>
+        <label for="login-password"><i class="fas fa-lock"></i> Password</label>
+        <div class="password-field">
+          <input type="password" id="login-password" required>
+          <i class="fas fa-eye toggle-password" onclick="togglePassword('login-password', this)"></i>
+        </div>
       </div>
       <button type="submit" class="login-button">Log In</button>
-      <p class="signup-text">Don't have an account? <a href="signup.html">Sign up here</a></p>
-      <p id="loginMessage" class="login-message"></p>
     </form>
+
+    <div class="social-login">
+      <button type="button" class="social-btn google google-login"><i class="fab fa-google"></i> Log in with Google</button>
+      <button type="button" class="social-btn phone phone-login"><i class="fas fa-phone"></i> Log in with Phone</button>
+    </div>
+
+    <p class="signup-text">Don't have an account? <a href="signup.html">Sign up here</a></p>
+    <p id="loginMessage" class="login-message"></p>
   </main>
+
+  <div id="recaptcha-container"></div> <!-- for phone login -->
+
   <footer>
     <p>&copy; 2024 HealthCare. All rights reserved.</p>
   </footer>
+
   <script>
-  function togglePassword(inputId, icon) {
-    const passwordInput = document.getElementById(inputId);
-    if (passwordInput.type === "password") {
-      passwordInput.type = "text";
-      icon.classList.remove('fa-eye');
-      icon.classList.add('fa-eye-slash');
-    } else {
-      passwordInput.type = "password";
-      icon.classList.remove('fa-eye-slash');
-      icon.classList.add('fa-eye');
+    function togglePassword(inputId, icon) {
+      const input = document.getElementById(inputId);
+      input.type = input.type === "password" ? "text" : "password";
+      icon.classList.toggle('fa-eye-slash');
+      icon.classList.toggle('fa-eye');
     }
-  }
   </script>
-  <script src="js/script_Login.js"></script>
+  
+
+  <!-- Load our clean auth.js which initializes Firebase itself -->
+  <script type="module" src="js/auth.js"></script>
 </body>
 </html>
