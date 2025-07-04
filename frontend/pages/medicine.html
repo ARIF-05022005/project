@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Find Medicines | HealthCare</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/styles_Medicine.css">
+</head>
+<body>
+  <header>
+    <div class="nav-top">
+      <div class="left">
+        <a href="indexMainpage.html" class="logo">
+  <img src="https://img.icons8.com/ios-filled/50/ffffff/heart-with-pulse.png" alt="Logo" />
+  <span>HealthCare</span>
+</a>
+        <div id="locationSection" class="location" tabindex="0" aria-label="User location">
+          <img src="https://img.icons8.com/ios-filled/24/ffffff/marker.png" alt="Location" />
+          <span id="locationText">Your Location</span>
+        </div>
+      </div>
+      <div class="right">
+        <a href="Special_Offer.html" class="offer-logo" tabindex="0" aria-label="Special Offer page">
+  <img src="https://img.icons8.com/ios-filled/24/ffffff/sale.png" alt="Offer" />
+  <span>Special Offer</span>
+</a>
+        <div class="login" tabindex="0" role="link" aria-label="Login page" onclick="window.location='login.html'">Log In</div>
+      </div>
+    </div>
+    <nav class="nav-bottom" aria-label="Primary">
+      <a href="indexMainpage.Html">Home</a>
+      <a href="Find_Doctor.html">Doctor</a>
+      <a href="Find_Hospital.html">Hospital</a>
+      <a href="medicine.html">Medicine</a>
+      <a href="emergency.html">Emergency</a>
+    </nav>
+  </header>
+
+  <main class="doctor-page-container">
+    <h1 class="section-title">Find Medicines</h1>
+    
+    <div class="doctor-search-container">
+      <h2>Search Medicines</h2>
+      <form id="medicineSearchForm">
+        <div class="search-filters">
+          <div class="filter-group">
+            <label for="medicineName"><i class="fas fa-pills"></i> Medicine Name</label>
+            <input type="text" id="medicineName" name="medicineName" placeholder="e.g., Paracetamol">
+          </div>
+          <div class="filter-group">
+            <label for="category"><i class="fas fa-tags"></i> Category</label>
+            <select id="category" name="category">
+              <option value="">All Categories</option>
+              <option value="Pain Relief">Pain Relief</option>
+              <option value="Antibiotics">Antibiotics</option>
+              <option value="Vitamins">Vitamins</option>
+              <option value="Allergy">Allergy</option>
+              <option value="Diabetes">Diabetes</option>
+              <!-- Add more if needed -->
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="brand"><i class="fas fa-industry"></i> Brand</label>
+            <input type="text" id="brand" name="brand" placeholder="e.g., Cipla">
+          </div>
+          <div class="filter-group">
+            <label for="availability"><i class="fas fa-warehouse"></i> Availability</label>
+            <select id="availability" name="availability">
+              <option value="">Any</option>
+              <option value="In Stock">In Stock</option>
+              <option value="Out of Stock">Out of Stock</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit" class="search-button">
+          <i class="fas fa-search"></i> Search Medicines
+        </button>
+      </form>
+    </div>
+
+    <div class="results-count">
+      <h3>0 Medicines Found</h3>
+    </div>
+
+    <div class="doctors-grid" id="medicinesGrid">
+      <!-- Medicine cards will be generated here by JS -->
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2023 HealthCare. All rights reserved.</p>
+  </footer>
+
+  <script src="../js/script_Medicine.js"></script>
+</body>
+</html>
