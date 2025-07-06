@@ -8,15 +8,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-  <header>
-    <div class="nav-top">
-      <div class="logo">
-        <img src="https://img.icons8.com/ios-filled/50/ffffff/heart-with-pulse.png" alt="Logo">
-        <span>HealthCare</span>
-      </div>
-    </div>
-  </header>
-
   <main class="login-page-container">
     <h1 class="section-title">Log In to Your Account</h1>
     <form class="login-form" id="login-form">
@@ -38,12 +29,11 @@
       <button type="button" class="social-btn google google-login"><i class="fab fa-google"></i> Log in with Google</button>
       <button type="button" class="social-btn phone phone-login"><i class="fas fa-phone"></i> Log in with Phone</button>
     </div>
-
     <p class="signup-text">Don't have an account? <a href="signup.html">Sign up here</a></p>
     <p id="loginMessage" class="login-message"></p>
   </main>
 
-  <div id="recaptcha-container"></div> <!-- for phone login -->
+  <div id="recaptcha-container"></div>
 
   <footer>
     <p>&copy; 2024 HealthCare. All rights reserved.</p>
@@ -57,9 +47,7 @@
       icon.classList.toggle('fa-eye');
     }
   </script>
-  
 
-  <!-- Load our clean auth.js which initializes Firebase itself -->
   <script type="module" src="js/auth.js"></script>
 </body>
 </html>
