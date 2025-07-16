@@ -1,7 +1,6 @@
-import {
-  initializeApp
-} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+// frontend/js/auth.js
 
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -24,124 +23,140 @@ const firebaseConfig = {
   measurementId: "G-D9YCM3NC2Y"
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+initializeApp(firebaseConfig);
+const auth = getAuth();
 const googleProvider = new GoogleAuthProvider();
-
 let recaptchaVerifier;
 
 document.addEventListener('DOMContentLoaded', () => {
-  console.log("✅ DOM loaded");
-
+  // Init invisible reCAPTCHA
   try {
-    recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
-      size: 'invisible',
-      callback: (response) => console.log("✅ Recaptcha verified:", response)
-    });
-    recaptchaVerifier.render().then(widgetId => {
-      console.log("✅ reCAPTCHA widget rendered:", widgetId);
-    });
+    if (window.recaptchaVerifier) window.recaptchaVerifier.clear();
+    recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', { size: 'invisible' });
+    recaptchaVerifier.render();
   } catch (e) {
-    console.error("❌ Failed to initialize reCAPTCHA:", e);
+    console.error("reCAPTCHA init failed:", e);
   }
 
   // SIGN UP
   const signupForm = document.getElementById('signup-form');
   if (signupForm) {
-    signupForm.addEventListener('submit', async (e) => {
+    signupForm.addEventListener('submit', async e => {
       e.preventDefault();
       const email = document.getElementById('signup-email').value;
       const password = document.getElementById('signup-password').value;
-      const confirmPassword = document.getElementById('confirm-password').value;
+      const confirm = document.getElementById('confirm-password').value;
+      const username = document.getElementById('signup-username')?.value || email;
       const msg = document.getElementById('signupMessage');
       msg.textContent = '';
-
-      if (password !== confirmPassword) {
-        msg.textContent = "Passwords do not match";
-        return;
-      }
+      if (password !== confirm) return msg.textContent = "Passwords don’t match";
 
       try {
-        await createUserWithEmailAndPassword(auth, email, password);
-        msg.textContent = "✅ Account created! Redirecting...";
-        setTimeout(() => window.location.href = "indexMainpage.html", 1500);
-      } catch (error) {
-        msg.textContent = "❌ " + error.message;
-        console.error(error);
+        const uc = await createUserWithEmailAndPassword(auth, email, password);
+        const token = await uc.user.getIdToken();
+        await fetch('http://localhost:5050/api/auth/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ email, username, password })
+        });
+        msg.textContent = "✅ Account created! Redirecting…";
+        setTimeout(() => window.location.href = 'indexMainpage.html', 1500);
+      } catch (err) {
+        msg.textContent = "❌ " + err.message;
       }
     });
   }
 
-  // LOGIN
+  // LOGIN - email/password
   const loginForm = document.getElementById('login-form');
   if (loginForm) {
-    loginForm.addEventListener('submit', async (e) => {
+    loginForm.addEventListener('submit', async e => {
       e.preventDefault();
       const email = document.getElementById('login-email').value;
       const password = document.getElementById('login-password').value;
       const msg = document.getElementById('loginMessage');
       msg.textContent = '';
-
       try {
-        await signInWithEmailAndPassword(auth, email, password);
-        msg.textContent = "✅ Login successful! Redirecting...";
-        setTimeout(() => window.location.href = "indexMainpage.html", 1500);
-      } catch (error) {
-        msg.textContent = "❌ Login failed: " + error.message;
-        console.error(error);
+        const uc = await signInWithEmailAndPassword(auth, email, password);
+        const token = await uc.user.getIdToken();
+        localStorage.setItem('token', token);
+        msg.textContent = "✅ Login successful! Redirecting…";
+        setTimeout(() => window.location.href = 'indexMainpage.html', 1500);
+      } catch (err) {
+        msg.textContent = "❌ " + err.message;
       }
     });
   }
 
-  // Google login
+  // LOGIN — Google
   document.querySelectorAll('.google-login').forEach(btn => {
     btn.addEventListener('click', async () => {
       try {
-        await signInWithPopup(auth, googleProvider);
-        window.location.href = "indexMainpage.html";
-      } catch (error) {
-        alert("❌ Google sign in failed: " + error.message);
-        console.error(error);
+        const res = await signInWithPopup(auth, googleProvider);
+        const user = res.user;
+        const token = await user.getIdToken();
+        await fetch('http://localhost:5050/api/auth/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ email: user.email, username: user.displayName || user.email })
+        });
+        localStorage.setItem('token', token);
+        window.location.href = 'indexMainpage.html';
+      } catch (err) {
+        alert("❌ Google sign-in failed: " + err.message);
       }
     });
   });
 
-  // Phone login
+  // LOGIN — Phone
   document.querySelectorAll('.phone-login').forEach(btn => {
     btn.addEventListener('click', async () => {
-      console.log("ℹ️ Phone login clicked");
-
-      const phoneNumber = prompt("Enter phone number with country code (e.g. +91XXXXXXXXXX):");
-      if (!phoneNumber) return;
-
+      const phone = prompt("Enter phone (with country code):");
+      if (!phone) return;
       try {
-        const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, recaptchaVerifier);
-        const code = prompt("Enter the verification code you received:");
+        const cr = await signInWithPhoneNumber(auth, phone, recaptchaVerifier);
+        const code = prompt("Enter code sent to phone:");
         if (!code) return;
-        await confirmationResult.confirm(code);
-        window.location.href = "indexMainpage.html";
-      } catch (error) {
-        alert("❌ Phone sign in failed: " + error.message);
-        console.error(error);
+        const result = await cr.confirm(code);
+        const user = result.user;
+        const token = await user.getIdToken();
+        await fetch('http://localhost:5050/api/auth/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ username: user.phoneNumber })
+        });
+        localStorage.setItem('token', token);
+        window.location.href = 'indexMainpage.html';
+      } catch (err) {
+        alert("❌ Phone sign-in failed: " + err.message);
       }
     });
   });
 
-  // Nav login/logout
+  // NAVBAR LOGIN/LOGOUT
   const loginDiv = document.querySelector('.login');
-  if (loginDiv) {
-    onAuthStateChanged(auth, (user) => {
+  onAuthStateChanged(auth, user => {
+    if (loginDiv) {
       if (user) {
         loginDiv.textContent = 'Log Out';
         loginDiv.onclick = async () => {
           await signOut(auth);
+          localStorage.clear();
           window.location.href = 'login.html';
         };
       } else {
         loginDiv.textContent = 'Log In';
         loginDiv.onclick = () => window.location.href = 'login.html';
       }
-    });
-  }
+    }
+  });
 });

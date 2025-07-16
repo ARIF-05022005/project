@@ -1,35 +1,94 @@
-        
-        const hospitals = [
-            { name: "General Hospital", distance: 3, services: ["Emergency", "Routine Care"] },
-            { name: "Children's Hospital", distance: 4, services: ["Emergency"] },
-            { name: "Specialized Hospital", distance: 8, services: ["Routine Care"] },
-            // Add more hospital data as needed
-        ];
+let map, service, userLocation;
 
-        document.getElementById('search').onclick = function() {
-            const hospitalType = document.getElementById('hospital-type').value;
-            const distanceFilter = parseInt(document.getElementById('distance').value.split(' ')[1]);
-            const services = Array.from(document.getElementById('services').selectedOptions).map(o => o.value);
-            const sortBy = document.getElementById('sort-by').value;
+function initMap() {
+  map = new google.maps.Map(document.getElementById("hospitalMap"), {
+    center: { lat: 28.6139, lng: 77.2090 }, // Default: Delhi
+    zoom: 13,
+  });
 
-            // Filter hospitals
-            let filteredHospitals = hospitals.filter(hospital => {
-                return (hospitalType === "All Types" || hospital.name.includes(hospitalType))
-                    && hospital.distance <= distanceFilter;
-            });
+  // Get user's location
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(pos => {
+      userLocation = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+      map.setCenter(userLocation);
+      document.getElementById('locationText').textContent = "Your Location";
 
-            // Sort hospitals
-            if (sortBy === "Distance (Nearest First)") {
-                filteredHospitals.sort((a, b) => a.distance - b.distance);
-            }
+      // Search initially with no query
+      performSearch();
+    });
+  } else {
+    alert("Geolocation not supported");
+  }
 
-            // Display hospitals
-            const hospitalList = document.getElementById('hospital-list');
-            hospitalList.innerHTML = '';
-            filteredHospitals.forEach(hospital => {
-                const div = document.createElement('div');
-                div.textContent = `${hospital.name} - ${hospital.distance} km away`;
-                hospitalList.appendChild(div);
-            });
-        };
-    
+  document.getElementById('hospitalSearchForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    performSearch();
+  });
+}
+
+function performSearch() {
+  const searchQuery = document.getElementById('searchQuery').value.trim();
+  const hospitalType = document.getElementById('hospitalType').value.trim();
+  const distance = parseInt(document.getElementById('distance').value);
+  const sortBy = document.getElementById('sortBy').value;
+
+  const request = {
+    location: userLocation,
+    radius: distance,
+    type: ['hospital'],
+    keyword: [searchQuery, hospitalType].filter(Boolean).join(' ')
+  };
+
+  service = new google.maps.places.PlacesService(map);
+  service.nearbySearch(request, (results, status) => {
+    if (status === google.maps.places.PlacesServiceStatus.OK && results) {
+      if (sortBy === 'rating') {
+        results.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+      } else {
+        results.sort((a, b) =>
+          google.maps.geometry.spherical.computeDistanceBetween(a.geometry.location, userLocation) -
+          google.maps.geometry.spherical.computeDistanceBetween(b.geometry.location, userLocation)
+        );
+      }
+      renderResults(results);
+    } else {
+      document.getElementById('hospitalsGrid').innerHTML = '<p>No hospitals found.</p>';
+    }
+  });
+}
+
+function renderResults(hospitals) {
+  const container = document.getElementById('hospitalsGrid');
+  container.innerHTML = '';
+
+  hospitals.forEach(place => {
+    const distance = google.maps.geometry.spherical.computeDistanceBetween(place.geometry.location, userLocation) / 1000;
+    const rating = place.rating ? `⭐ ${place.rating}` : 'No rating';
+
+    const card = `
+      <div class="hospital-card">
+        <span class="hospital-badge">${place.types.includes('hospital') ? 'Hospital' : 'Clinic'}</span>
+        <div class="hospital-image" style="background-image: url('${place.photos ? place.photos[0].getUrl({ maxWidth: 400 }) : 'https://via.placeholder.com/400x200'}')"></div>
+        <div class="hospital-info">
+          <h3 class="hospital-name">${place.name}</h3>
+          <div class="hospital-meta">
+            <div class="hospital-distance"><i class="fas fa-location-arrow"></i> ${distance.toFixed(2)} km away</div>
+            <div class="hospital-wait-time"><i class="fas fa-star"></i> ${rating}</div>
+          </div>
+          <div class="hospital-actions">
+            <a class="action-btn directions-btn" href="https://www.google.com/maps/dir/?api=1&destination=${place.geometry.location.lat()},${place.geometry.location.lng()}" target="_blank">
+              <i class="fas fa-directions"></i> Directions
+            </a>
+          </div>
+        </div>
+      </div>
+    `;
+    container.innerHTML += card;
+  });
+
+  document.getElementById('resultsCount').innerHTML = `
+    <i class="fas fa-map-marker-alt"></i> Showing <strong>${hospitals.length}</strong> hospitals near <strong>Your Location</strong>`;
+}
+
+// Needed for Google callback
+window.initMap = initMap;

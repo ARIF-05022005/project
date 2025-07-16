@@ -1,64 +1,54 @@
+import {
+  getAuth,
+  signInWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBNCeq_Yrw5w2vS9a3uRXHEF1YMEjHmNDs",
+  authDomain: "healthcare-ef03d.firebaseapp.com",
+  projectId: "healthcare-ef03d",
+  storageBucket: "healthcare-ef03d.firebasestorage.app",
+  messagingSenderId: "323260241840",
+  appId: "1:323260241840:web:633e327b42bc0e0502e875",
+  measurementId: "G-D9YCM3NC2Y"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
 document.addEventListener('DOMContentLoaded', () => {
-  const togglePassword = document.getElementById('togglePassword');
-  const passwordInput = document.getElementById('loginPassword');
   const loginForm = document.getElementById('loginForm');
   const loginMessage = document.getElementById('loginMessage');
 
-  // Toggle show/hide password (only if togglePassword element exists)
-  if (togglePassword) {
-    togglePassword.addEventListener('click', () => {
-      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-      passwordInput.setAttribute('type', type);
-      togglePassword.classList.toggle('fa-eye-slash');
-    });
-  }
-
-  // Handle login form submit
   loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
+
     const email = document.getElementById('email').value.trim();
-    const password = passwordInput.value.trim();
+    const password = document.getElementById('loginPassword').value.trim();
 
-    loginMessage.textContent = ''; // Clear previous
-
-    if (!email || !password) {
-      loginMessage.textContent = 'Please enter both email and password.';
-      loginMessage.className = 'login-message error';
-      return;
-    }
-
-    if (!validateEmail(email)) {
-      loginMessage.textContent = 'Please enter a valid email address.';
-      loginMessage.className = 'login-message error';
-      return;
-    }
+    loginMessage.textContent = '';
 
     try {
-      const res = await fetch('http://localhost:5050/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      const token = await user.getIdToken();
 
-      const data = await res.json();
+      console.log('✅ Firebase Token:', token);
 
-      if (res.ok) {
-        localStorage.setItem('token', data.token);
-        loginMessage.textContent = 'Login successful!';
-        loginMessage.className = 'login-message success';
-        window.location.href = 'indexMainpage.html';
-      } else {
-        loginMessage.textContent = data.msg || 'Login failed.';
-        loginMessage.className = 'login-message error';
-      }
-    } catch (err) {
-      console.error(err);
-      loginMessage.textContent = 'Something went wrong.';
+      // Save token to localStorage
+      localStorage.setItem('token', token);
+
+      loginMessage.textContent = 'Login successful!';
+      loginMessage.className = 'login-message success';
+
+      // ✅ Redirect to homepage
+      window.location.href = 'indexMainpage.html';
+
+    } catch (error) {
+      console.error(error);
+      loginMessage.textContent = error.message;
       loginMessage.className = 'login-message error';
     }
   });
-
-  function validateEmail(email) {
-    return /\S+@\S+\.\S+/.test(email);
-  }
 });

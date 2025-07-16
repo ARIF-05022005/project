@@ -1,22 +1,39 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+import {
+  getAuth,
+  createUserWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+// Your Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyBNCeq_Yrw5w2vS9a3uRXHEF1YMEjHmNDs",
+  authDomain: "healthcare-ef03d.firebaseapp.com",
+  projectId: "healthcare-ef03d",
+  storageBucket: "healthcare-ef03d.firebasestorage.app",
+  messagingSenderId: "323260241840",
+  appId: "1:323260241840:web:633e327b42bc0e0502e875",
+  measurementId: "G-D9YCM3NC2Y"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
 document.addEventListener('DOMContentLoaded', () => {
-  const signupForm = document.getElementById('signupForm');
+  const signupForm = document.getElementById('signup-form');
   const signupMessage = document.getElementById('signupMessage');
 
   signupForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const name = document.getElementById('username').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value.trim();
+    const username = document.getElementById('signup-username').value.trim();
+    const email = document.getElementById('signup-email').value.trim();
+    const password = document.getElementById('signup-password').value.trim();
     const confirmPassword = document.getElementById('confirm-password').value.trim();
-
-    console.log('Name:', name);
-    console.log('Email:', email);
-    console.log('Password:', password);
 
     signupMessage.textContent = '';
 
-    if (!name || !email || !password || !confirmPassword) {
+    if (!username || !email || !password || !confirmPassword) {
       signupMessage.textContent = 'Please fill in all fields.';
       signupMessage.className = 'signup-message error';
       return;
@@ -29,26 +46,31 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     try {
-      const res = await fetch('http://localhost:5050/api/auth/register', {
+      // 🔥 Sign up with Firebase
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+
+      // Optional: Save username to backend
+      const token = await userCredential.user.getIdToken();
+
+      await fetch('http://localhost:5050/api/auth/register', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        // ✅ sending username instead of name
-        body: JSON.stringify({ username: name, email, password }),
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          username,
+          email,
+          password,
+        }),
       });
 
-      const data = await res.json();
-
-      if (res.ok) {
-        signupMessage.textContent = 'Signup successful!';
-        signupMessage.className = 'signup-message success';
-        window.location.href = 'login.html';
-      } else {
-        signupMessage.textContent = data.msg || 'Signup failed.';
-        signupMessage.className = 'signup-message error';
-      }
-    } catch (err) {
-      console.error(err);
-      signupMessage.textContent = 'Something went wrong.';
+      signupMessage.textContent = 'Signup successful!';
+      signupMessage.className = 'signup-message success';
+      window.location.href = 'login.html';
+    } catch (error) {
+      console.error(error);
+      signupMessage.textContent = error.message || 'Signup failed.';
       signupMessage.className = 'signup-message error';
     }
   });

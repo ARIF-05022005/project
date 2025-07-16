@@ -4,26 +4,21 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Healthcare Website</title>
-  <link rel="stylesheet" href="css/styles_Main.css">
-  <!-- Leaflet CSS -->
-  <link 
-  rel="stylesheet" 
-  href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"
-  integrity="sha512-mD70nAW2ThLsWH0zif8JPbfraZ8hbCtjQ+5RU1m4+ztZq6/MymyZeB55pWsi4YAX+73yvcaJyk61mzfYMvtm9w=="
-  crossorigin=""
-/>
-<script type="module">
-  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
-  const auth = window.firebase.auth;
-  onAuthStateChanged(auth, user => {
-    if (!user) {
-      window.location.href = "../login.html";
-    }
-  });
-</script>
-
+  <link rel="stylesheet" href="css/styles_shared.css" />
+  <link rel="stylesheet" href="css/styles_Main.css" />
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"
+    integrity="sha512-mD70nAW2ThLsWH0zif8JPbfraZ8hbCtjQ+5RU1m4+ztZq6/MymyZeB55pWsi4YAX+73yvcaJyk61mzfYMvtm9w=="
+    crossorigin=""
+  />
+  <!-- ✅ Google Maps API for Places Autocomplete -->
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDJLn3hR4dbAXjIZ4On6_K0EyxsqIMqRPQ&libraries=places"
+    defer
+  ></script>
 </head>
-<body>
+<body style="display: none;">
   <header>
     <div class="nav-top">
       <div class="left">
@@ -31,19 +26,21 @@
           <img src="https://img.icons8.com/ios-filled/50/ffffff/heart-with-pulse.png" alt="Logo" />
           <span>HealthCare</span>
         </div>
-        <div id="locationSection" class="location" tabindex="0" aria-label="User location">
-          <img src="https://img.icons8.com/ios-filled/24/ffffff/marker.png" alt="Location" />
-          <span id="locationText">Your Location</span>
-        </div>
+        <a href="pages/select_location.html" id="locationSection" class="location" tabindex="0" aria-label="Select your location">
+  <img src="https://img.icons8.com/ios-filled/24/ffffff/marker.png" alt="Location" />
+  <span id="locationText">Your Location</span>
+</a>
       </div>
       <div class="right">
         <a href="pages/Special_Offer.html" class="offer-logo" tabindex="0" aria-label="Special Offer page">
           <img src="https://img.icons8.com/ios-filled/24/ffffff/sale.png" alt="Offer" />
           <span>Special Offer</span>
         </a>
-        <div class="login" tabindex="0" role="link" aria-label="Login page" 
-     onclick="window.location='login.html'" 
-     onkeypress="if(event.key==='Enter'||event.key===' ') window.location='login.html'">Log Out</div>
+        <div class="login" tabindex="0" role="link" aria-label="Login page"
+          onclick="window.location='login.html'"
+          onkeypress="if(event.key==='Enter'||event.key===' ') window.location='login.html'">
+          Log Out
+        </div>
       </div>
     </div>
     <nav class="nav-bottom" aria-label="Primary">
@@ -51,17 +48,10 @@
       <a href="pages/Find_Doctor.html">Doctor</a>
       <a href="pages/Find_Hospital.html">Hospital</a>
       <a href="pages/medicine.html">Medicine</a>
+      <a href="pages/lab_test.html">Lab Test</a>
       <a href="pages/emergency.html">Emergency</a>
     </nav>
   </header>
-
-  <!-- Map popup dialog -->
-  <div id="mapPopup" class="map-popup" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="mapPopupLabel">
-    <button id="closeMapBtn" class="close-map-btn" aria-label="Close location map">&times;</button>
-    <h2 id="mapPopupLabel">Your Current Location</h2>
-    <div id="map" class="map-container"></div>
-    <div id="mapStatus" class="map-status">Loading location...</div>
-  </div>
 
   <main>
     <section class="main-section">
@@ -113,13 +103,42 @@
     <p>© 2024 Healthcare Website. All rights reserved.</p>
   </footer>
 
-  <!-- Leaflet JS -->
-  <script 
-  src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"
-  integrity="sha512-Dqm3h1Y4qiHUjbhxTuBGQsza0Tfppn53SHlu/uj1f+RT+xfShfe7r6czRf5r2NmllO2aKx+tYJgoxboOkn1Scg=="
-  crossorigin=""
-></script>
+  <script type="module">
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
 
+    const firebaseConfig = {
+      apiKey: "AIzaSyBNCeq_Yrw5w2vS9a3uRXHEF1YMEjHmNDs",
+      authDomain: "healthcare-ef03d.firebaseapp.com",
+      projectId: "healthcare-ef03d",
+      storageBucket: "healthcare-ef03d.appspot.com",
+      messagingSenderId: "323260241840",
+      appId: "1:323260241840:web:633e327b42bc0e0502e875",
+      measurementId: "G-D9YCM3NC2Y"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        console.log("✅ User signed in:", user.email);
+        const token = await user.getIdToken();
+        localStorage.setItem("token", token);
+        document.body.style.display = "block";
+      } else {
+        console.log("❌ No user signed in, redirecting...");
+        window.location.href = "./login.html";
+      }
+    });
+  </script>
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"
+    integrity="sha512-Dqm3h1Y4qiHUjbhxTuBGQsza0Tfppn53SHlu/uj1f+RT+xfShfe7r6czRf5r2NmllO2aKx+tYJgoxboOkn1Scg=="
+    crossorigin=""
+  ></script>
+  <script src="js/script_shared_location.js"></script>
   <script src="js/script_Main.js"></script>
 </body>
 </html>

@@ -1,7 +1,7 @@
 const express = require('express');
 const connectDB = require('./config/db');
 const cors = require('cors');
-const path = require('path');      // ✅ added
+const path = require('path');
 require('dotenv').config();
 
 const app = express();
@@ -20,6 +20,7 @@ app.use(express.static(path.join(__dirname, '../frontend')));
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));
+app.use('/api/user', require('./routes/user')); // ✅ added this line
 
 // Start server
 const PORT = process.env.PORT || 5050;
