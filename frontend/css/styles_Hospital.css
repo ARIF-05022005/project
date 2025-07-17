@@ -438,6 +438,30 @@ form#hospitalSearchForm {
   gap: 0.5rem;
 }
 
+.open-now {
+  color: green;
+  font-weight: bold;
+}
+
+.closed-now {
+  color: red;
+  font-weight: bold;
+}
+
+.unknown-status {
+  color: gray;
+  font-style: italic;
+}
+
+.hospital-phone-link {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.hospital-phone-link:hover {
+  text-decoration: underline;
+}
+
 /* Footer */
 footer {
   text-align: center;

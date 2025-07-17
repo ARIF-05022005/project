@@ -18,10 +18,14 @@ app.use(express.json());
 // ✅ Serve static frontend files
 app.use(express.static(path.join(__dirname, '../frontend')));
 
+// ✅ Serve login.html for root URL
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/login.html'));
+});
+
 // Routes
 app.use('/api/auth', require('./routes/auth'));
-app.use('/api/user', require('./routes/user')); // ✅ added this line
+app.use('/api/user', require('./routes/user'));
 
-// Start server
 const PORT = process.env.PORT || 5050;
 app.listen(PORT, () => console.log(`✅ Server started on port ${PORT}`));
