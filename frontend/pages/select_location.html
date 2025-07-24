@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Select Your Location</title>
+  <link rel="stylesheet" href="../css/styles_select_location.css" />
+  <link rel="icon" href="/hospitalimagelogo.jpg">
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDJLn3hR4dbAXjIZ4On6_K0EyxsqIMqRPQ&libraries=places"
+    defer
+  ></script>
+</head>
+<body>
+  <header>
+    <h1>Select Your Location</h1>
+  </header>
+
+  <main>
+    <div class="location-container">
+      <button id="useCurrentBtn" class="use-current-btn">
+        📍 Use Current Location
+      </button>
+
+      <div class="or-divider">OR</div>
+
+      <input
+        id="locationSearch"
+        type="text"
+        placeholder="Search for area, street name..."
+        aria-label="Search for location"
+      />
+    </div>
+  </main>
+
+  <script src="../js/script_select_location.js"></script>
+</body>
+</html>

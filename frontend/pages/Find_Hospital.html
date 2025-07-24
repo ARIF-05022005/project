@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Find Hospitals | HealthCare</title>
+  <link rel="stylesheet" href="../css/styles_shared.css" />
+  <link rel="stylesheet" href="../css/styles_Hospital.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="icon" href="/hospitalimagelogo.jpg">
+  <style>
+    .hospital-page-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .hospital-search-header h1 {
+      font-size: 2.5rem;
+      color: #2c3e50;
+    }
+
+    .hospital-search-header p {
+      color: #666;
+      margin-bottom: 1.5rem;
+    }
+
+    #hospitalSearchForm {
+      background: #f8f8f8;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 2rem;
+    }
+
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+
+    .filter-group {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .filter-group label {
+      display: block;
+      font-weight: bold;
+      color: #2c3e50;
+      margin-bottom: 0.5rem;
+    }
+
+    .filter-group select {
+      width: 100%;
+      padding: 0.6rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    .search-button {
+      margin-top: 1rem;
+      background-color: #27ae60;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .search-button:hover {
+      background-color: #219150;
+    }
+
+    .results-header {
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+      color: #34495e;
+    }
+
+    .hospitals-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .hospital-card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+      padding: 1rem;
+      transition: transform 0.2s ease;
+    }
+
+    .hospital-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .hospital-card h3 {
+      margin: 0.5rem 0;
+      color: #2c3e50;
+    }
+
+    .hospital-card p {
+      margin: 0.25rem 0;
+      color: #666;
+    }
+
+    footer {
+      margin-top: 3rem;
+      text-align: center;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="nav-top">
+    <div class="left">
+      <a href="../indexMainpage.html" class="logo">
+        <img src="https://img.icons8.com/ios-filled/50/ffffff/heart-with-pulse.png" alt="Logo" />
+        <span>HealthCare</span>
+      </a>
+      <div id="locationSection" class="location" tabindex="0" aria-label="Your current location">
+          <img src="https://img.icons8.com/ios-filled/24/ffffff/marker.png" alt="Location marker" />
+          <span id="locationText">Your Location</span>
+      </div>
+    </div>
+    <div class="right">
+      <a href="Special_Offer.html" class="offer-logo">
+        <img src="https://img.icons8.com/ios-filled/24/ffffff/sale.png" alt="Offer" />
+        <span>Special Offer</span>
+      </a>
+      <div class="login" role="button" onclick="window.location='../login.html'">Log Out</div>
+    </div>
+  </div>
+  <nav class="nav-bottom">
+    <a href="../indexMainpage.html">Home</a>
+    <a href="Find_Doctor.html">Doctor</a>
+    <a href="Find_Hospital.html" aria-current="page">Hospital</a>
+    <a href="medicine.html">Medicine</a>
+    <a href="lab_test.html">Lab Test</a>
+    <a href="emergency.html">Emergency</a>
+  </nav>
+</header>
+
+<main class="hospital-page-container">
+  <div class="hospital-search-header">
+    <h1>Find Hospitals Near You</h1>
+    <p>Discover top-rated healthcare facilities in your area with real-time availability</p>
+  </div>
+
+  <form id="hospitalSearchForm">
+    <div class="filter-row">
+      <div class="filter-group">
+        <label for="hospitalType"><i class="fas fa-hospital"></i> Hospital Type</label>
+        <select id="hospitalType">
+          <option value="">Any Type</option>
+          <option value="General Hospital">General Hospital</option>
+          <option value="Eye Hospital">Eye Hospital</option>
+          <option value="Cancer Hospital">Cancer Hospital</option>
+          <option value="Government Hospital">Government Hospital</option>
+          <option value="Clinic">Clinic</option>
+          <option value="Multispeciality Hospital">Multispeciality Hospital</option>
+          <option value="Private Hospital">Private Hospital</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="distance"><i class="fas fa-map-marker-alt"></i> Distance</label>
+        <select id="distance">
+          <option value="5000">Within 5 km</option>
+          <option value="10000">Within 10 km</option>
+          <option value="25000">Within 25 km</option>
+          <option value="50000">Within 50 km</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="sortBy"><i class="fas fa-sort"></i> Sort By</label>
+        <select id="sortBy">
+          <option value="distance">Distance</option>
+          <option value="rating">Rating</option>
+        </select>
+      </div>
+    </div>
+    <button type="submit" class="search-button"><i class="fas fa-search"></i> Search Hospitals</button>
+  </form>
+
+  <div class="results-header">
+    <div class="results-count" id="resultsCount">
+      <i class="fas fa-map-marker-alt"></i> Showing hospitals near <strong>Your Location</strong>
+    </div>
+  </div>
+
+  <div class="hospitals-grid" id="hospitalsGrid">
+    <!-- JS will inject hospital cards here -->
+  </div>
+</main>
+
+<footer>
+  <p>©️ 2024 Healthcare Website. All rights reserved.</p>
+</footer>
+
+<script src="../js/script_shared_location.js"></script>
+<script src="../js/script_Hospital.js"></script>
+<script async
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDJLn3hR4dbAXjIZ4On6_K0EyxsqIMqRPQ&libraries=places,geometry&callback=initMap">
+</script>
+</body>
+</html>

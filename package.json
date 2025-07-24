@@ -1,0 +1,7 @@
+{
+  "devDependencies": {
+    "live-server": "^1.2.0",
+    "nodemon": "^3.1.10",
+    "vite": "^7.0.2"
+  }
+}

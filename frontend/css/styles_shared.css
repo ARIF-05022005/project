@@ -1,0 +1,295 @@
+/* styles_shared.css */
+
+/* 1. Base font and color for body */
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #006a71;             /* your chosen primary text color */
+  background-color: #f7f8fa;
+  font-size: 16px;
+  line-height: 1.5;
+  text-decoration: none;
+}
+
+/* 2. Consistent nav bar styles */
+.nav-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  font-size: 1.1rem;
+}
+
+.nav-top .left,
+.nav-top .right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.logo img {
+  width: 32px;
+  height: 32px;
+}
+
+/* Location section */
+.location {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  color: #ffffff;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.location img {
+  width: 24px;
+  height: 24px;
+}
+
+/* nav-bottom styles */
+.nav-bottom {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  font-weight: 700;
+  padding: 1rem 0;
+  background-color: #188f91;
+  border-radius: 8px;
+}
+
+.nav-bottom a {
+  color: #ffffff;                     /* all nav links same color */
+  font-size: 1.2rem;
+  padding: 0.6rem 1.5rem;
+  border-radius: 30px;
+  background: linear-gradient(45deg, #a7006a, #48a6a7);
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  text-decoration: none;              /* REMOVE underline */
+}
+
+.nav-bottom a:hover,
+.nav-bottom a:focus {
+  background: #c71585;
+  box-shadow: 0 0 15px #c71585;
+  transform: scale(1.05);
+  outline: none;
+  text-decoration: none;              /* ensure no underline on hover */
+}
+
+/* Links anywhere else */
+a {
+  color: #006a71;
+  text-decoration: none;
+}
+
+a:hover,
+a:focus {
+  color: #c71585;
+  text-decoration: none;
+}
+
+/* headings consistent color */
+h1, h2, h3, h4, h5, h6 {
+  color: #188f91;
+  margin-top: 0;
+}
+
+/* paragraphs */
+p {
+  color: #333333;
+  font-size: 1rem;
+}
+
+/* results count on hospital page */
+#resultsCount {
+  color: #188f91;
+  font-weight: 600;
+}
+
+/* location span override */
+.location span {
+  font-size: 1rem;
+  color: #ffffff;
+}
+
+/* buttons */
+button, .login {
+  background-color: #a7006a;
+  color: #ffffff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+button:hover, .login:hover {
+  background-color: #c71585;
+  text-decoration: none;
+}
+
+/* styles_shared.css */
+
+/* RESET ALL LINK STYLES */
+a, a:visited, a:hover, a:focus, a:active {
+  text-decoration: none !important;
+  color: inherit !important;
+}
+
+/* Universal body font */
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 16px;
+  color: #188f91;
+  background-color: #f7f8fa;
+  line-height: 1.5;
+}
+
+/* All nav links */
+.nav-bottom a {
+  color: #ffffff !important;
+  text-decoration: none !important;
+  font-size: 1.2rem;
+  padding: 0.6rem 1.5rem;
+  border-radius: 30px;
+  background: linear-gradient(45deg, #a7006a, #48a6a7);
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.nav-bottom a:hover,
+.nav-bottom a:focus {
+  background: #c71585;
+  box-shadow: 0 0 15px #c71585;
+  transform: scale(1.05);
+  color: #ffffff !important;
+}
+
+/* Top nav fonts */
+.nav-top,
+.nav-top .left,
+.nav-top .right,
+.nav-top .left a,
+.nav-top .right a,
+.nav-top .left span,
+.nav-top .right span {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif !important;
+  font-size: 1rem;
+  color: #ffffff !important;
+  text-decoration: none !important;
+}
+
+/* Logo fonts */
+.logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: #ffffff !important;
+  text-decoration: none !important;
+}
+
+/* Location section */
+.location {
+  color: #ffffff !important;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+}
+
+.location span {
+  color: #ffffff !important;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none !important;
+}
+
+/* Headings consistent color */
+h1, h2, h3, h4, h5, h6 {
+  color: #188f91 !important;
+  margin-top: 0;
+}
+
+/* Paragraphs */
+p {
+  color: #333333;
+  font-size: 1rem;
+  text-decoration: none !important;
+}
+
+/* All buttons and login link */
+button, .login {
+  background-color: #a7006a;
+  color: #ffffff !important;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-weight: bold;
+  text-decoration: none !important;
+}
+
+button:hover, .login:hover {
+  background-color: #c71585;
+  text-decoration: none !important;
+}
+
+/* All grid items or cards */
+.card, .grid-item {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif !important;
+  color: #188f91 !important;
+  text-decoration: none !important;
+}
+
+/* Force all anchor tags to look uniform */
+a, a:visited, a:hover, a:focus, a:active {
+  text-decoration: none !important;
+  color: inherit !important;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+}
+
+/* Force nav-bottom styles same across all pages */
+.nav-bottom a {
+  color: #ffffff !important;
+  font-size: 1.2rem !important;
+  font-weight: 700 !important;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+}
+
+.offer-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700; /* or 600 if you prefer semi-bold */
+  font-size: 1.1rem;
+}
+
+.offer-logo span {
+  font-weight: 700 !important;
+}

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Find a Doctor | HealthCare</title>
+  <link rel="stylesheet" href="../css/styles_shared.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="../css/styles_Doctor.css">
+  <link rel="icon" href="/hospitalimagelogo.jpg">
+  <script type="module">
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+  const auth = window.firebase.auth;
+  onAuthStateChanged(auth, user => {
+    if (!user) {
+      window.location.href = "../login.html";
+    }
+  });
+</script>
+
+</head>
+<body>
+  <header>
+    <div class="nav-top">
+      <div class="left">
+        <a href="../indexMainpage.html" class="logo">
+          <img src="https://img.icons8.com/ios-filled/50/ffffff/heart-with-pulse.png" alt="HealthCare logo" />
+          <span>HealthCare</span>
+        </a>
+        <div id="locationSection" class="location" tabindex="0" aria-label="Your current location">
+          <img src="https://img.icons8.com/ios-filled/24/ffffff/marker.png" alt="Location marker" />
+          <span id="locationText">Your Location</span>
+        </div>
+      </div>
+      <div class="right">
+        <a href="Special_Offer.html" class="offer-logo" tabindex="0" aria-label="Special Offer page">
+  <img src="https://img.icons8.com/ios-filled/24/ffffff/sale.png" alt="Offer" />
+  <span>Special Offer</span>
+</a>
+        <div class="login" tabindex="0" role="link" aria-label="Login page" onclick="window.location='../login.html'">Log Out</div>
+      </div>
+    </div>
+    <!-- frontend/pages/Find_Doctor.html -->
+    <nav class="nav-bottom" aria-label="Main navigation">
+      <a href="../indexMainpage.html">Home</a>
+      <a href="Find_Doctor.html" aria-current="page">Doctor</a>
+      <a href="Find_Hospital.html">Hospital</a>
+      <a href="medicine.html">Medicine</a>
+      <a href="lab_test.html">Lab Test</a>
+      <a href="emergency.html">Emergency</a>
+    </nav>
+
+  </header>
+
+  <main class="doctor-page-container">
+    <div id="loadingIndicator" class="loading-indicator">
+      <div class="spinner"><i class="fas fa-spinner fa-spin"></i></div>
+      <p>Loading doctors...</p>
+    </div>
+
+    <h1 class="section-title">Find the Right Doctor for You</h1>
+
+    <section class="doctor-search-container" aria-label="Search filters for doctors">
+      <h2>Search Filters</h2>
+      <form id="doctorSearchForm">
+        <div class="search-filters">
+          <div class="filter-group">
+            <label for="specialty"><i class="fas fa-briefcase-medical"></i> Specialty</label>
+            <select id="specialty" name="specialty">
+              <option value="">All Specialties</option>
+              <!-- Filled by JS -->
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label for="location"><i class="fas fa-map-marker-alt"></i> Location</label>
+            <select id="location" name="location">
+              <option value="">All Locations</option>
+              <!-- Filled by JS -->
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label for="language"><i class="fas fa-language"></i> Language</label>
+            <select id="language" name="language">
+              <option value="">Any Language</option>
+              <!-- Filled by JS -->
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label for="insurance"><i class="fas fa-shield-alt"></i> Insurance</label>
+            <select id="insurance" name="insurance">
+              <option value="">Any Insurance</option>
+              <!-- Filled by JS -->
+            </select>
+          </div>
+        </div>
+
+        <button type="submit" class="search-button">
+          <i class="fas fa-search"></i> Search Doctors
+        </button>
+      </form>
+    </section>
+
+    <div class="results-count" aria-live="polite">
+      <h3>0 Doctors Available</h3>
+    </div>
+
+    <section class="doctors-grid" id="doctorsGrid" aria-label="List of doctors">
+      <!-- Filled dynamically by JS -->
+    </section>
+
+    <!-- Doctor Details Modal -->
+    <div id="doctorModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="doctorModalTitle">
+      <div class="modal-content">
+        <button class="close-modal" aria-label="Close modal">&times;</button>
+        <div id="doctorDetails">
+          <!-- Doctor details will be filled dynamically -->
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 HealthCare. All rights reserved.</p>
+  </footer>
+  <script src="../js/script_shared_location.js"></script>
+  <script src="../js/script_Doctor.js"></script>
+</body>
+</html>

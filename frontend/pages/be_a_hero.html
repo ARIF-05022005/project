@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Be a Hero | HealthCare</title>
+  <link rel="stylesheet" href="../css/styles_shared.css" />
+  <link rel="stylesheet" href="../css/styles_Main.css">
+ <!-- use your main style or hero-specific style -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="icon" href="/hospitalimagelogo.jpg">
+  <style>
+    .coming-soon-container {
+      max-width: 600px;
+      margin: 4rem auto;
+      background: white;
+      border-radius: 15px;
+      text-align: center;
+      padding: 2rem;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+    }
+    .coming-soon-icon {
+      font-size: 4rem;
+      color: var(--magenta);
+      margin-bottom: 1rem;
+    }
+    .coming-soon-container h1 {
+      font-size: 2rem;
+      color: var(--dark-teal);
+      margin-bottom: 1rem;
+    }
+    .coming-soon-container p {
+      font-size: 1.1rem;
+      color: var(--dark-teal);
+    }
+  </style>
+  <script type="module">
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+  const auth = window.firebase.auth;
+  onAuthStateChanged(auth, user => {
+    if (!user) {
+      window.location.href = "../login.html";
+    }
+  });
+</script>
+</head>
+<body>
+  <header>
+  <div class="nav-top">
+    <div class="left">
+      <a href="../indexMainpage.html" class="logo">
+        <img src="https://img.icons8.com/ios-filled/50/ffffff/heart-with-pulse.png" alt="Logo" />
+        <span>HealthCare</span>
+      </a>
+      <div id="locationSection" class="location" tabindex="0" aria-label="User location">
+        <img src="https://img.icons8.com/ios-filled/24/ffffff/marker.png" alt="Location" />
+        <span id="locationText">Your Location</span>
+      </div>
+    </div>
+    <div class="right">
+      <a href="Special_Offer.html" class="offer-logo" tabindex="0" aria-label="Special Offer page">
+        <img src="https://img.icons8.com/ios-filled/24/ffffff/sale.png" alt="Offer" />
+        <span>Special Offer</span>
+      </a>
+      <div class="login" tabindex="0" role="link" aria-label="Login page" onclick="window.location='../login.html'">Log Out</div>
+    </div>
+  </div>
+  <nav class="nav-bottom" aria-label="Primary">
+    <a href="../indexMainpage.html">Home</a>
+    <a href="Find_Doctor.html">Doctor</a>
+    <a href="Find_Hospital.html">Hospital</a>
+    <a href="medicine.html">Medicine</a>
+    <a href="lab_test.html">Lab Test</a>
+    <a href="emergency.html">Emergency</a>
+  </nav>
+</header>
+
+  <main>
+    <div class="coming-soon-container">
+      <i class="fas fa-hand-holding-heart coming-soon-icon"></i>
+      <h1>Want to be a Hero?</h1>
+      <p>This feature is coming soon! Stay tuned to become a life saver by joining our blood donor & volunteer network.</p>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2024 HealthCare. All rights reserved.</p>
+  </footer>
+  <script src="../js/script_shared_location.js"></script>
+</body>
+</html>

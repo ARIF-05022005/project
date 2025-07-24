@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Find Medical Shops | HealthCare</title>
+  <link rel="stylesheet" href="../css/styles_shared.css" />
+  <link rel="stylesheet" href="../css/styles_Medicine.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script type="module">
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+  const auth = window.firebase.auth;
+  onAuthStateChanged(auth, user => {
+    if (!user) {
+      window.location.href = "../login.html";
+    }
+  });
+</script>
+</head>
+<body>
+<header>
+  <div class="nav-top">
+    <div class="left">
+      <a href="../indexMainpage.html" class="logo">
+        <img src="https://img.icons8.com/ios-filled/50/ffffff/heart-with-pulse.png" alt="Logo" />
+        <span>HealthCare</span>
+      </a>
+      <div id="locationSection" class="location" tabindex="0" aria-label="Your current location">
+          <img src="https://img.icons8.com/ios-filled/24/ffffff/marker.png" alt="Location marker" />
+          <span id="locationText">Your Location</span>
+      </div>
+    </div>
+    <div class="right">
+      <a href="Special_Offer.html" class="offer-logo">
+        <img src="https://img.icons8.com/ios-filled/24/ffffff/sale.png" alt="Offer" />
+        <span>Special Offer</span>
+      </a>
+      <div class="login" role="button" onclick="window.location='../login.html'">Log Out</div>
+    </div>
+  </div>
+  <nav class="nav-bottom">
+    <a href="../indexMainpage.html">Home</a>
+    <a href="Find_Doctor.html">Doctor</a>
+    <a href="Find_Hospital.html">Hospital</a>
+    <a href="medicine.html" aria-current="page">Medicine</a>
+    <a href="lab_test.html">Lab Test</a>
+    <a href="emergency.html">Emergency</a>
+  </nav>
+</header>
+
+<main class="hospital-page-container">
+  <div class="hospital-search-header">
+    <h1>Find Medical Shops Near You</h1>
+    <p>Discover pharmacies and medical stores in your area with real-time availability</p>
+  </div>
+
+  <form id="pharmacySearchForm">
+    <div class="filter-row">
+      <div class="filter-group">
+        <label for="pharmacyType"><i class="fas fa-clinic-medical"></i> Shop Type</label>
+        <select id="pharmacyType">
+          <option value="">Any Type</option>
+          <option value="Pharmacy">Pharmacy</option>
+          <option value="Medical Store">Medical Store</option>
+          <option value="Chemist">Chemist</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="distance"><i class="fas fa-map-marker-alt"></i> Distance</label>
+        <select id="distance">
+          <option value="5000">Within 5 km</option>
+          <option value="10000">Within 10 km</option>
+          <option value="25000">Within 25 km</option>
+          <option value="50000">Within 50 km</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="sortBy"><i class="fas fa-sort"></i> Sort By</label>
+        <select id="sortBy">
+          <option value="distance">Distance</option>
+          <option value="rating">Rating</option>
+        </select>
+      </div>
+    </div>
+    <button type="submit" class="search-button"><i class="fas fa-search"></i> Search Medical Shops</button>
+  </form>
+
+  <div class="results-header">
+    <div class="results-count" id="resultsCount">
+      <i class="fas fa-map-marker-alt"></i> Showing medical shops near <strong>Your Location</strong>
+    </div>
+  </div>
+
+  <div class="hospitals-grid" id="pharmaciesGrid">
+    <!-- JS will inject pharmacy cards here -->
+  </div>
+</main>
+
+<footer>
+  <p>&copy; 2024 Healthcare Website. All rights reserved.</p>
+</footer>
+
+<script src="../js/script_shared_location.js"></script>
+<script src="../js/script_Medicine.js"></script>
+<script async
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDJLn3hR4dbAXjIZ4On6_K0EyxsqIMqRPQ&libraries=places,geometry&callback=initMap">
+</script>
+</body>
+</html>

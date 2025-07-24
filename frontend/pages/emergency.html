@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emergency | HealthCare</title>
+  <link rel="stylesheet" href="../css/styles_shared.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/styles_Medicine.css"> <!-- reuse your existing CSS -->
+  <link rel="stylesheet" href="../css/emergency.css">
+  <link rel="icon" href="/hospitalimagelogo.jpg">
+  <script type="module">
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+  const auth = window.firebase.auth;
+  onAuthStateChanged(auth, user => {
+    if (!user) {
+      window.location.href = "../login.html";
+    }
+  });
+</script>
+</head>
+<body>
+  <header>
+    <div class="nav-top">
+      <div class="left">
+        <a href="../indexMainpage.html" class="logo">
+  <img src="https://img.icons8.com/ios-filled/50/ffffff/heart-with-pulse.png" alt="Logo" />
+  <span>HealthCare</span>
+</a>
+        <div id="locationSection" class="location" tabindex="0" aria-label="User location">
+          <img src="https://img.icons8.com/ios-filled/24/ffffff/marker.png" alt="Location" />
+          <span id="locationText">Your Location</span>
+        </div>
+      </div>
+      <div class="right">
+        <a href="Special_Offer.html" class="offer-logo" tabindex="0" aria-label="Special Offer page">
+  <img src="https://img.icons8.com/ios-filled/24/ffffff/sale.png" alt="Offer" />
+  <span>Special Offer</span>
+</a>
+
+        <div class="login" tabindex="0" role="link" aria-label="Login page" onclick="window.location='../login.html'">Log Out</div>
+      </div>
+
+    </div>
+    <!-- frontend/pages/emergency.html -->
+    <nav class="nav-bottom" aria-label="Primary">
+      <a href="../indexMainpage.html">Home</a>
+      <a href="Find_Doctor.html">Doctor</a>
+      <a href="Find_Hospital.html">Hospital</a>
+      <a href="medicine.html">Medicine</a>
+      <a href="lab_test.html">Lab Test</a>
+      <a href="emergency.html" aria-current="page">Emergency</a>
+    </nav>
+
+  </header>
+
+  <main class="doctor-page-container">
+    <h1 class="section-title">Emergency Services</h1>
+    <div class="doctor-search-container" style="text-align: center; padding: 3rem;">
+      <i class="fas fa-exclamation-triangle coming-soon-icon" style="font-size: 4rem; color: var(--magenta); margin-bottom: 1rem;"></i>
+      <h2 style="font-size: 2rem; margin-bottom: 1rem;">Feature Coming Soon!</h2>
+      <p style="font-size: 1.2rem; color: var(--dark-teal); max-width: 600px; margin: 0 auto;">
+        We’re working hard to bring you fast and reliable emergency support, so you can get help when you need it most.
+        Stay tuned!
+      </p>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2023 HealthCare. All rights reserved.</p>
+  </footer>
+  <script src="../js/script_shared_location.js"></script>
+</body>
+</html>
