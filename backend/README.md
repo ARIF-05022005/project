@@ -1,6 +1,6 @@
-# 📦 Healthcare Project – Backend
+# 📦 SurakshaSetu Project – Backend
 
-This is the backend part of the **Healthcare Web Application**, built with **JavaScript** and integrated with **Firebase Authentication**.  
+This is the backend part of the **SurakshaSetu Web Application**, built with **JavaScript** and integrated with **Firebase Authentication**.  
 It handles user authentication, manages login & signup (email, Google, phone), and serves as the secure gateway for user access.
 
 ---

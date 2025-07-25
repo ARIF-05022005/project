@@ -14,7 +14,7 @@ const LANGUAGES = [
 ];
 
 const INSURANCE_PROVIDERS = [
-  'BlueCross', 'Aetna', 'Cigna', 'United Healthcare',
+  'BlueCross', 'Aetna', 'Cigna', 'United SurakshaSetu',
   'Medicare', 'Medicaid', 'Kaiser', 'Humana'
 ];
 

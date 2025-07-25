@@ -6,9 +6,9 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/fireba
 
 const firebaseConfig = {
   apiKey: "AIzaSyBNCeq_Yrw5w2vS9a3uRXHEF1YMEjHmNDs",
-  authDomain: "healthcare-ef03d.firebaseapp.com",
-  projectId: "healthcare-ef03d",
-  storageBucket: "healthcare-ef03d.firebasestorage.app",
+  authDomain: "surakshasetu-ef03d.firebaseapp.com",
+  projectId: "surakshasetu-ef03d",
+  storageBucket: "surakshasetu-ef03d.firebasestorage.app",
   messagingSenderId: "323260241840",
   appId: "1:323260241840:web:633e327b42bc0e0502e875",
   measurementId: "G-D9YCM3NC2Y"

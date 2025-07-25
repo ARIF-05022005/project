@@ -1,6 +1,6 @@
-echo "# 🩺 HealthCare – Full-Stack Web App for Seamless User Authentication
+echo "# 🩺 SurakshaSetu – Full-Stack Web App for Seamless User Authentication
 
-**HealthCare** is a full-stack web application designed to deliver secure, modern, and user-friendly authentication.  
+**SurakshaSetu** is a full-stack web application designed to deliver secure, modern, and user-friendly authentication.  
 It combines a responsive frontend with a modular backend powered by **Firebase Authentication**, offering multiple login options — Email/Password, Google, and Phone (OTP).
 
 ## ✨ Features
@@ -27,5 +27,5 @@ git clone https://github.com/ARIF-05022005/project.git
 
 ---
 
-> 🌱 **Built to be simple, secure, and scalable — ready to grow with your HealthCare platform.**
+> 🌱 **Built to be simple, secure, and scalable — ready to grow with your SurakshaSetu platform.**
 " > README.md
