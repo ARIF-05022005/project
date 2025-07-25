@@ -5,107 +5,122 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Find Lab Tests | HealthCare</title>
   <link rel="stylesheet" href="../css/styles_shared.css" />
+  <link rel="stylesheet" href="../css/styles_Medicine.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="../css/styles_LabTest.css">
-  <link rel="icon" href="/hospitalimagelogo.jpg">
-  <script type="module">
-  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
-  const auth = window.firebase.auth;
-  onAuthStateChanged(auth, user => {
-    if (!user) {
-      window.location.href = "../login.html";
+</head>
+<body>
+<header>
+  <div class="nav-top">
+    <div class="left">
+      <a href="../indexMainpage.html" class="logo">
+        <img src="https://img.icons8.com/ios-filled/50/ffffff/heart-with-pulse.png" alt="Logo" />
+        <span>HealthCare</span>
+      </a>
+      <div id="locationSection" class="location" tabindex="0" aria-label="Your current location">
+        <img src="https://img.icons8.com/ios-filled/24/ffffff/marker.png" alt="Location marker" />
+        <span id="user-location">Detecting your location...</span>
+      </div>
+    </div>
+    <div class="right">
+      <a href="Special_Offer.html" class="offer-logo">
+        <img src="https://img.icons8.com/ios-filled/24/ffffff/sale.png" alt="Offer" />
+        <span>Special Offer</span>
+      </a>
+      <div class="login" role="button" onclick="window.location='../login.html'">Log Out</div>
+    </div>
+  </div>
+  <nav class="nav-bottom">
+    <a href="../indexMainpage.html">Home</a>
+    <a href="Find_Doctor.html">Doctor</a>
+    <a href="Find_Hospital.html">Hospital</a>
+    <a href="medicine.html">Medicine</a>
+    <a href="lab_test.html" aria-current="page">Lab Test</a>
+    <a href="emergency.html">Emergency</a>
+  </nav>
+</header>
+
+<main class="hospital-page-container">
+  <div class="hospital-search-header">
+    <h1>Find Lab Test Centers Near You</h1>
+    <p>Discover diagnostic labs, pathology centers, and test labs in your area with real-time availability</p>
+  </div>
+
+  <form id="pharmacySearchForm">
+    <div class="filter-row">
+      <div class="filter-group">
+        <label for="labType"><i class="fas fa-clinic-medical"></i> Lab Type</label>
+        <select id="labType">
+          <option value="any">Any Type</option>
+          <option value="diagnostic">Diagnostic</option>
+          <option value="pathology">Pathology</option>
+          <option value="blood test">Blood Test</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="distance"><i class="fas fa-map-marker-alt"></i> Distance</label>
+        <select id="distance">
+          <option value="5000">Within 5 km</option>
+          <option value="10000">Within 10 km</option>
+          <option value="25000">Within 25 km</option>
+          <option value="50000">Within 50 km</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="sortBy"><i class="fas fa-sort"></i> Sort By</label>
+        <select id="sortBy">
+          <option value="distance">Distance</option>
+          <option value="rating">Rating</option>
+        </select>
+      </div>
+    </div>
+    <button type="button" class="search-button" onclick="getNearbyLabs()">
+      <i class="fas fa-search"></i> Search Labs
+    </button>
+  </form>
+
+  <div class="results-header" id="results-header" style="display:none;">
+    <div class="results-count">
+      <i class="fas fa-map-marker-alt"></i> Showing lab centers near <strong id="locationText">Your Location</strong>
+    </div>
+  </div>
+
+  <div class="hospitals-grid" id="labResults">
+    <!-- Lab cards will be injected here -->
+  </div>
+</main>
+
+<footer>
+  <p>&copy; 2024 Healthcare Website. All rights reserved.</p>
+</footer>
+
+<script>
+  function initMap() {
+    // no-op for Google Maps callback
+  }
+  // Make location section clickable for location selection
+  document.addEventListener('DOMContentLoaded', function() {
+    var locSection = document.getElementById('locationSection');
+    if (locSection) {
+      locSection.style.cursor = 'pointer';
+      locSection.onclick = function() {
+        // Set return URL to this page
+        localStorage.setItem('locationReturnUrl', 'lab_test.html');
+        window.location.href = 'select_location.html';
+      };
+    }
+    // Set location text from localStorage if available
+    var userLoc = document.getElementById('user-location');
+    var savedAddress = localStorage.getItem('userLocationAddress');
+    if (userLoc && savedAddress) {
+      userLoc.textContent = savedAddress;
     }
   });
 </script>
 
-</head>
-<body>
-  <header>
-    <div class="nav-top">
-      <div class="left">
-        <a href="../indexMainpage.html" class="logo">
-  <img src="https://img.icons8.com/ios-filled/50/ffffff/heart-with-pulse.png" alt="Logo" />
-  <span>HealthCare</span>
-</a>
-        <div id="locationSection" class="location" tabindex="0" aria-label="User location">
-          <img src="https://img.icons8.com/ios-filled/24/ffffff/marker.png" alt="Location" />
-          <span id="locationText">Your Location</span>
-        </div>
-      </div>
-      <div class="right">
-        <div class="offer-logo" onclick="window.location='Special_Offer.html'" tabindex="0" role="link" aria-label="Special Offer page">
-          <img src="https://img.icons8.com/ios-filled/24/ffffff/sale.png" alt="Offer" />
-          <span>Special Offer</span>
-        </div>
-        <div class="login" tabindex="0" role="link" aria-label="Login page" onclick="window.location='../login.html'">Log Out</div>
-      </div>
-    </div>
-    <!-- frontend/pages/lab_test.html -->
-    <nav class="nav-bottom" aria-label="Primary">
-      <a href="../indexMainpage.html">Home</a>
-      <a href="Find_Doctor.html">Doctor</a>
-      <a href="Find_Hospital.html">Hospital</a>
-      <a href="medicine.html">Medicine</a>
-      <a href="lab_test.html" aria-current="page">Lab Test</a>
-      <a href="emergency.html">Emergency</a>
-    </nav>
+<script src="../js/script_LabTest.js"></script>
 
-  </header>
-
-  <main class="doctor-page-container">
-    <h1 class="section-title">Find Lab Tests</h1>
-    
-    <div class="doctor-search-container">
-      <h2>Search Lab Tests</h2>
-      <form id="labTestSearchForm">
-        <div class="search-filters">
-          <div class="filter-group">
-            <label for="testName"><i class="fas fa-vials"></i> Test Name</label>
-            <input type="text" id="testName" name="testName" placeholder="e.g., Blood Sugar">
-          </div>
-          <div class="filter-group">
-            <label for="category"><i class="fas fa-tags"></i> Category</label>
-            <select id="category" name="category">
-              <option value="">All Categories</option>
-              <option value="Blood Test">Blood Test</option>
-              <option value="Imaging">Imaging</option>
-              <option value="Urine Test">Urine Test</option>
-              <option value="COVID-19">COVID-19</option>
-              <option value="Heart">Heart</option>
-            </select>
-          </div>
-          <div class="filter-group">
-            <label for="labName"><i class="fas fa-flask"></i> Lab Name</label>
-            <input type="text" id="labName" name="labName" placeholder="e.g., Apollo Lab">
-          </div>
-          <div class="filter-group">
-            <label for="availability"><i class="fas fa-warehouse"></i> Availability</label>
-            <select id="availability" name="availability">
-              <option value="">Any</option>
-              <option value="Available">Available</option>
-              <option value="Not Available">Not Available</option>
-            </select>
-          </div>
-        </div>
-        <button type="submit" class="search-button">
-          <i class="fas fa-search"></i> Search Lab Tests
-        </button>
-      </form>
-    </div>
-
-    <div class="results-count">
-      <h3>0 Lab Tests Found</h3>
-    </div>
-
-    <div class="doctors-grid" id="labTestsGrid">
-      <!-- Lab Test cards will be generated by JS -->
-    </div>
-  </main>
-
-  <footer>
-    <p>&copy; 2024 HealthCare. All rights reserved.</p>
-  </footer>
-  <script src="../js/script_shared_location.js"></script>
-  <script src="../js/script_LabTest.js"></script>
+<script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDJLn3hR4dbAXjIZ4On6_K0EyxsqIMqRPQ&libraries=places&callback=initMap">
+</script>
 </body>
 </html>

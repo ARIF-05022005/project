@@ -1,3 +1,73 @@
+/* Hospital Card Styles (copied from styles_Hospital.css for identical look) */
+.hospital-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+}
+
+.hospital-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.hospital-badge {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: var(--magenta);
+  color: white;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  z-index: 2;
+}
+
+.hospital-image {
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.hospital-image::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+}
+
+.hospital-info {
+  padding: 1.5rem;
+}
+
+.hospital-name {
+  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
+  color: var(--dark-teal);
+}
+
+.hospital-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.hospital-distance,
+.hospital-wait-time {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  color: var(--teal);
+}
 :root {
   --off-white: #f2efe7;
   --light-blue: #9acbd0;

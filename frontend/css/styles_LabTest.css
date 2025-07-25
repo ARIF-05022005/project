@@ -1,284 +1,195 @@
-:root {
-  --off-white: #f2efe7;
-  --light-blue: #9acbd0;
-  --teal: #48a6a7;
-  --dark-teal: #006a71;
-  --magenta: #a7006a;
-  --magenta-hover: #c71585;
-  --shadow-color: rgba(167, 0, 106, 0.3);
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: var(--off-white);
-  color: var(--dark-teal);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  line-height: 1.5;
+  margin: 0;
+  background-color: #f4f6f9;
 }
 
-/* Header styles */
 header {
-  background-color: var(--dark-teal);
-  color: var(--off-white);
-  padding: 1rem 2rem;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  box-shadow: 0 1px 6px var(--shadow-color);
-}
-
-.nav-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  font-size: 1.1rem;
-}
-
-.left, .right {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 1.5rem;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-}
-
-.logo img {
-  width: 32px;
-  height: 32px;
-}
-
-.location, .offer-logo {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-}
-
-.offer-logo span {
-  color: var(--off-white);
-}
-
-.login {
-  font-weight: 700;
-  background-color: var(--magenta);
-  color: var(--off-white);
-  padding: 0.4rem 1rem;
-  border-radius: 25px;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: background-color 0.3s;
-}
-.login:hover {
-  background-color: var(--magenta-hover);
-}
-
-.nav-bottom {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  font-weight: 700;
-  padding: 1rem 0;
-  background-color: #188f91;
-  border-radius: 8px;
-  box-shadow: 0 0 10px var(--shadow-color);
-  flex-wrap: wrap;
-}
-
-.nav-bottom a {
-  font-size: 1.2rem;
-  padding: 0.6rem 1.5rem;
-  border-radius: 30px;
-  background: linear-gradient(45deg, var(--magenta), var(--teal));
-  box-shadow: 0 0 8px var(--magenta);
-  text-decoration: none;
-  text-transform: uppercase;
-  transition: transform 0.3s, background 0.3s;
-}
-
-.nav-bottom a:hover {
-  transform: scale(1.05);
-  background: var(--magenta-hover);
-}
-
-.doctor-page-container {
-  max-width: 1200px;
-  margin: 2rem auto;
-  padding: 0 1rem;
-}
-
-.section-title {
+  background-color: #1976d2;
+  color: white;
+  padding: 1rem;
   text-align: center;
-  font-size: 2.2rem;
-  margin-bottom: 1.5rem;
-  color: var(--dark-teal);
-  position: relative;
-  padding-bottom: 0.5rem;
 }
 
-.section-title::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  width: 80px;
-  height: 3px;
-  background: var(--magenta);
-  transform: translateX(-50%);
-}
-
-.doctor-search-container {
-  background: white;
-  border-radius: 15px;
+.container {
   padding: 2rem;
-  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+  max-width: 1200px;
+  margin: auto;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
   margin-bottom: 2rem;
 }
 
-.search-filters {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.filter-group label {
-  margin-bottom: 0.5rem;
-  display: block;
-  font-weight: 600;
-}
-
-.filter-group input,
-.filter-group select {
-  width: 100%;
-  padding: 0.8rem;
+.filters select,
+.filters button {
+  padding: 0.6rem 1rem;
+  border: 1px solid #ccc;
   border-radius: 6px;
-  border: 2px solid #ddd;
-  transition: border 0.3s;
-}
-
-.filter-group input:focus,
-.filter-group select:focus {
-  border-color: var(--teal);
+  font-size: 1rem;
   outline: none;
 }
 
-.search-button {
-  background: var(--magenta);
+.filters button {
+  background-color: #1976d2;
   color: white;
   border: none;
-  padding: 1rem 2rem;
-  font-size: 1.1rem;
-  border-radius: 30px;
   cursor: pointer;
-  display: block;
-  margin: 0 auto;
-  transition: background 0.3s;
-}
-.search-button:hover {
-  background: var(--magenta-hover);
+  transition: 0.3s;
 }
 
-.results-count {
+.filters button:hover {
+  background-color: #125ea9;
+}
+
+#results-header {
+  display: none;
   text-align: center;
   margin-bottom: 1rem;
+  font-size: 1.2rem;
+  color: #333;
 }
 
-.doctors-grid {
+/* Card grid for lab results, matching hospital style */
+.hospitals-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 2rem;
-}
-
-/* Card (reused for lab tests) */
-.doctor-card {
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-  overflow: hidden;
-  transition: transform 0.3s;
-}
-.doctor-card:hover {
-  transform: translateY(-5px);
-}
-
-.doctor-image {
-  height: 200px;
-  background: #ccc;
-  background-size: cover;
-  background-position: center;
-}
-
-.doctor-info {
-  padding: 1.5rem;
-}
-
-.doctor-name {
-  font-size: 1.4rem;
-  color: var(--dark-teal);
-  margin-bottom: 0.5rem;
-}
-
-.doctor-qualification,
-.doctor-rating,
-.doctor-available,
-.doctor-location {
-  font-size: 0.95rem;
-  margin-bottom: 0.5rem;
-}
-
-.doctor-actions {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 1rem;
-}
-
-.view-profile,
-.book-now {
-  flex: 1;
-  margin: 0 0.25rem;
-  background: var(--teal);
-  color: white;
-  padding: 0.7rem 1rem;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: background 0.3s;
-}
-.view-profile:hover,
-.book-now:hover {
-  background: var(--dark-teal);
-}
-
-footer {
-  background: var(--dark-teal);
-  color: var(--off-white);
-  text-align: center;
-  padding: 1.7rem 1rem;
-  font-weight: 600;
   margin-top: 2rem;
 }
 
-@media (max-width: 768px) {
-  .search-filters {
-    grid-template-columns: 1fr;
+/* Card style for labs */
+.pharmacy-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 106, 113, 0.10), 0 1.5px 6px rgba(167, 0, 106, 0.08);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: relative;
+}
+.pharmacy-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 6px 24px rgba(0, 106, 113, 0.18), 0 3px 12px rgba(167, 0, 106, 0.12);
+}
+.pharmacy-card .card-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: #48a6a7;
+  color: #fff;
+  padding: 0.3em 0.9em;
+  border-radius: 8px;
+  font-size: 0.95em;
+  font-weight: 600;
+  z-index: 2;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+.pharmacy-card .card-img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+.pharmacy-card .card-info {
+  padding: 1.2em 1.3em 1.1em 1.3em;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+.pharmacy-card .card-title {
+  font-size: 1.25em;
+  color: #006a71;
+  margin-bottom: 0.2em;
+}
+.pharmacy-card .card-address {
+  color: #555;
+  font-size: 1em;
+  margin-bottom: 0.2em;
+}
+.pharmacy-card .card-rating {
+  color: #a7006a;
+  font-size: 1em;
+  margin-bottom: 0.2em;
+}
+.pharmacy-card .card-phone {
+  color: #1976d2;
+  font-size: 0.98em;
+  margin-bottom: 0.2em;
+}
+
+.pharmacy-card .card-hours {
+  color: #006a71;
+  font-size: 0.95em;
+}
+
+/* Match hospital card image style */
+
+.pharmacy-card .card-img {
+  width: 100%;
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+.pharmacy-card .card-img::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  pointer-events: none;
+}
+
+/* Remove stray bracket and fix structure */
+
+.hospital-card {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hospital-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+
+.hospital-card h3 {
+  margin-top: 0;
+  font-size: 1.25rem;
+  color: #1976d2;
+}
+
+.hospital-card p {
+  margin: 0.4rem 0;
+  color: #555;
+  font-size: 0.95rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+  .filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filters select,
+  .filters button {
+    width: 100%;
   }
 }

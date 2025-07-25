@@ -18,66 +18,57 @@ const INSURANCE_PROVIDERS = [
   'Medicare', 'Medicaid', 'Kaiser', 'Humana'
 ];
 
-// Doctor Data Service
-const DoctorService = {
-  /**
-   * Get all doctors (simulated API call with realistic delay)
-   * @returns {Promise<Array>} Array of doctor objects
-   */
-  getAllDoctors: function() {
-    return new Promise((resolve) => {
-      // Simulate network delay
-      setTimeout(() => {
-        resolve([
-          {
-            id: 1,
-            name: 'Dr. Sarah Johnson',
-            specialty: 'Cardiology',
-            qualification: 'MD, FACC',
-            rating: 4.5,
-            reviews: 128,
-            availability: 'Today',
-            consultationType: 'Both',
-            image: 'https://randomuser.me/api/portraits/women/65.jpg',
-            location: 'Downtown',
-            languages: ['English', 'Spanish'],
-            insurance: ['BlueCross', 'Aetna'],
-            bio: 'Board-certified cardiologist with 15 years of experience.'
-          },
-          {
-            id: 2,
-            name: 'Dr. Michael Chen',
-            specialty: 'Neurology',
-            qualification: 'MD, PhD',
-            rating: 4.8,
-            reviews: 76,
-            availability: 'Tomorrow',
-            consultationType: 'In-person',
-            image: 'https://randomuser.me/api/portraits/men/22.jpg',
-            location: 'North District',
-            languages: ['English', 'Mandarin'],
-            insurance: ['Cigna', 'United Healthcare'],
-            bio: 'Specializing in movement disorders and neurodegenerative diseases.'
-          },
-          // More doctors...
-        ]);
-      }, 800); // Simulate network delay
-    });
-  },
 
-  /**
-   * Get filter options for dropdowns 
-   * (could be from API in real implementation)
-   */
-  getFilterOptions: function() {
-    return {
-      specialties: SPECIALTIES,
-      languages: LANGUAGES,
-      insuranceProviders: INSURANCE_PROVIDERS,
-      locations: ['Downtown', 'North District', 'South District', 'East District', 'West District']
-    };
-  }
-};
+// Fetch real nearby doctors using Google Places API
+async function fetchNearbyDoctors(userLocation, radius = 5000) {
+  const apiKey = "AIzaSyDJLn3hR4dbAXjIZ4On6_K0EyxsqIMqRPQ";
+  const endpoint = `https://places.googleapis.com/v1/places:searchNearby`;
+  const body = {
+    includedTypes: ["doctor"],
+    locationRestriction: {
+      circle: {
+        center: {
+          latitude: userLocation.lat,
+          longitude: userLocation.lng,
+        },
+        radius: radius,
+      }
+    }
+  };
+  let allDoctors = [];
+  let pageToken = null;
+  let pageCount = 0;
+  do {
+    let fetchBody = { ...body };
+    if (pageToken) {
+      fetchBody.pageToken = pageToken;
+    }
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Goog-Api-Key": apiKey,
+        "X-Goog-FieldMask": "places.displayName,places.location,places.rating,places.photos,places.formattedAddress,places.nationalPhoneNumber,places.currentOpeningHours",
+      },
+      body: JSON.stringify(fetchBody),
+    });
+    if (!response.ok) {
+      console.error("Nearby Search API error:", await response.text());
+      throw new Error("Nearby Search API failed");
+    }
+    const data = await response.json();
+    if (data.places && Array.isArray(data.places)) {
+      allDoctors = allDoctors.concat(data.places);
+    }
+    pageToken = data.nextPageToken || null;
+    pageCount++;
+    // Google API may require a short delay before using nextPageToken
+    if (pageToken) {
+      await new Promise(res => setTimeout(res, 1500));
+    }
+  } while (pageToken && pageCount < 5); // limit to 5 pages for safety
+  return allDoctors;
+}
 
 // UI Controller
 const UIController = (function() {
@@ -87,10 +78,9 @@ const UIController = (function() {
     doctorsGrid: document.getElementById('doctorsGrid'),
     resultsCount: document.querySelector('.results-count'),
     loadingIndicator: document.getElementById('loadingIndicator'),
-    specialtySelect: document.getElementById('specialty'),
-    locationSelect: document.getElementById('location'),
-    languageSelect: document.getElementById('language'),
-    insuranceSelect: document.getElementById('insurance')
+    doctorTypeSelect: document.getElementById('doctorType'),
+    distanceSelect: document.getElementById('distance'),
+    sortBySelect: document.getElementById('sortBy')
   };
 
   // Private methods
@@ -99,6 +89,7 @@ const UIController = (function() {
     elements.doctorsGrid.style.display = show ? 'none' : 'grid';
   }
 
+  // Make showError public
   function showError(message) {
     const errorEl = document.createElement('div');
     errorEl.className = 'error-message';
@@ -142,23 +133,9 @@ const UIController = (function() {
       this.loadDoctors();
     },
 
-    // Setup filter dropdowns with options
-    setupFilters: async function() {
-      const options = DoctorService.getFilterOptions();
-      
-      // Populate specialty dropdown
-      elements.specialtySelect.innerHTML = `
-        <option value="">All Specialties</option>
-        ${options.specialties.map(s => `<option value="${s}">${s}</option>`).join('')}
-      `;
-      
-      // Populate location dropdown
-      elements.locationSelect.innerHTML = `
-        <option value="">All Locations</option>
-        ${options.locations.map(l => `<option value="${l}">${l}</option>`).join('')}
-      `;
-      
-      // Populate other dropdowns similarly...
+    // Setup filter dropdowns with static options (already in HTML)
+    setupFilters: function() {
+      // No-op: options are static in HTML
     },
 
     // Bind event listeners
@@ -167,30 +144,34 @@ const UIController = (function() {
         e.preventDefault();
         this.handleSearch();
       });
-
       // Add event delegation for doctor card buttons
       elements.doctorsGrid.addEventListener('click', (e) => {
         if (e.target.closest('.view-profile')) {
-          const card = e.target.closest('.doctor-card');
-          const doctorId = card.dataset.id;
-          this.viewDoctorProfile(doctorId);
+          const card = e.target.closest('.hospital-card');
+          // No profile modal for real Google Places data
         }
-        
         if (e.target.closest('.book-now')) {
-          const card = e.target.closest('.doctor-card');
-          const doctorId = card.dataset.id;
-          this.bookAppointment(doctorId);
+          const card = e.target.closest('.hospital-card');
+          // No booking modal for real Google Places data
         }
       });
     },
+    showError,
 
-    // Main function to load and display doctors
+    // Main function to load and display real nearby doctors
     loadDoctors: async function() {
       try {
         showLoading(true);
-        const doctors = await DoctorService.getAllDoctors();
+        // Get user location from localStorage
+        const userLat = localStorage.getItem("userLocationLat");
+        const userLng = localStorage.getItem("userLocationLon");
+        if (!userLat || !userLng) {
+          showError("No user location found. Please select your location first.");
+          return;
+        }
+        const userLocation = { lat: parseFloat(userLat), lng: parseFloat(userLng) };
+        const doctors = await fetchNearbyDoctors(userLocation, 5000);
         this.renderDoctors(doctors);
-        this.updateResultsCount(doctors.length);
       } catch (error) {
         console.error('Error loading doctors:', error);
         showError('Failed to load doctors. Please try again later.');
@@ -203,20 +184,70 @@ const UIController = (function() {
     handleSearch: async function() {
       try {
         showLoading(true);
-        
-        const formData = new FormData(elements.doctorSearchForm);
-        const filters = {
-          specialty: formData.get('specialty'),
-          location: formData.get('location'),
-          language: formData.get('language'),
-          insurance: formData.get('insurance')
-        };
-
-        const doctors = await DoctorService.getAllDoctors();
-        const filteredDoctors = this.filterDoctors(doctors, filters);
-        
-        this.renderDoctors(filteredDoctors);
-        this.updateResultsCount(filteredDoctors.length);
+        // Get filter values
+        const doctorType = elements.doctorTypeSelect.value;
+        const distance = parseInt(elements.distanceSelect.value, 10); // in meters or km
+        const sortBy = elements.sortBySelect.value;
+        // Get user location from localStorage
+        const userLat = localStorage.getItem("userLocationLat");
+        const userLng = localStorage.getItem("userLocationLon");
+        if (!userLat || !userLng) {
+          showError("No user location found. Please select your location first.");
+          return;
+        }
+        const userLocation = { lat: parseFloat(userLat), lng: parseFloat(userLng) };
+        // Fetch for all smaller radii up to the selected one, merge and deduplicate
+        const availableRadii = [5000, 10000, 25000, 50000]; // adjust as per your dropdown values (meters)
+        const selectedRadius = distance;
+        let allDoctors = [];
+        let seenPlaceIds = new Set();
+        for (let r of availableRadii) {
+          if (r > selectedRadius) break;
+          let docs = await fetchNearbyDoctors(userLocation, r);
+          for (let doc of docs) {
+            // Use place_id or name+address as unique key
+            let key = doc.id || (doc.displayName?.text + doc.formattedAddress);
+            if (!seenPlaceIds.has(key)) {
+              allDoctors.push(doc);
+              seenPlaceIds.add(key);
+            }
+          }
+        }
+        let doctors = allDoctors;
+        // Calculate distance for each doctor
+        const uLat = userLocation.lat;
+        const uLng = userLocation.lng;
+        function haversine(lat1, lon1, lat2, lon2) {
+          const R = 6371; // km
+          const dLat = (lat2 - lat1) * Math.PI / 180;
+          const dLon = (lon2 - lon1) * Math.PI / 180;
+          const a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
+          const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+          return R * c;
+        }
+        doctors.forEach(doc => {
+          const lat = doc.location?.latitude;
+          const lng = doc.location?.longitude;
+          if (lat && lng) {
+            doc._distance = haversine(uLat, uLng, lat, lng);
+          } else {
+            doc._distance = Infinity;
+          }
+        });
+        // Filter by doctor type (simple name match)
+        if (doctorType) {
+          doctors = doctors.filter(doc => {
+            const name = doc.displayName?.text?.toLowerCase() || "";
+            return name.includes(doctorType.toLowerCase());
+          });
+        }
+        // Always sort by distance (nearest first)
+        doctors.sort((a, b) => a._distance - b._distance);
+        // If user selected sort by rating, sort by rating but keep nearest first for equal ratings
+        if (sortBy === "rating") {
+          doctors.sort((a, b) => (b.rating || 0) - (a.rating || 0) || a._distance - b._distance);
+        }
+        this.renderDoctors(doctors);
       } catch (error) {
         console.error('Search error:', error);
         showError('An error occurred during search. Please try again.');
@@ -240,18 +271,24 @@ const UIController = (function() {
     // Render doctors to the grid
     renderDoctors: function(doctors) {
       elements.doctorsGrid.innerHTML = '';
-      
-      if (doctors.length === 0) {
+      // Filter out hospitals, diagnostic centers, labs, etc.
+      const filtered = doctors.filter(doctor => {
+        const name = doctor.displayName?.text?.toLowerCase() || "";
+        // Exclude if name contains hospital, diagnostic, lab, centre, center, medical, polyclinic, etc.
+        return !/hospital|diagnostic|lab|centre|center|medical|polyclinic|nursing|emergency|pathology/.test(name);
+      });
+      // Update the results count to match the filtered doctors
+      this.updateResultsCount(filtered.length);
+      if (filtered.length === 0) {
         elements.doctorsGrid.innerHTML = `
           <div class="no-results">
             <i class="fas fa-user-md"></i>
-            <p>No doctors found matching your criteria</p>
+            <p>No individual doctor clinics found near your location</p>
           </div>
         `;
         return;
       }
-
-      doctors.forEach(doctor => {
+      filtered.forEach(doctor => {
         const doctorCard = this.createDoctorCard(doctor);
         elements.doctorsGrid.appendChild(doctorCard);
       });
@@ -259,41 +296,61 @@ const UIController = (function() {
 
     // Create a doctor card element
     createDoctorCard: function(doctor) {
+      // Use Google Places API fields
+      const name = doctor.displayName?.text || "Unnamed";
+      const rating = doctor.rating ? ` ${doctor.rating}` : "No rating";
+      const address = doctor.formattedAddress || "Address not available";
+      let phone = "Phone not available";
+      if (doctor.nationalPhoneNumber) {
+        const cleaned = doctor.nationalPhoneNumber.replace(/\s+/g, "");
+        phone = `<a href="tel:${cleaned}" class="hospital-phone-link">${doctor.nationalPhoneNumber}</a>`;
+      }
+      let photoUrl = "https://placehold.co/400x300?text=No+Image+Available";
+      if (doctor.photos && doctor.photos.length > 0 && doctor.photos[0].name) {
+        const ref = doctor.photos[0].name;
+        photoUrl = `https://places.googleapis.com/v1/${ref}/media?maxHeightPx=400&key=AIzaSyDJLn3hR4dbAXjIZ4On6_K0EyxsqIMqRPQ`;
+      }
+      const lat = doctor.location?.latitude;
+      const lng = doctor.location?.longitude;
+      let distanceKm = "Unknown";
+      const userLat = localStorage.getItem("userLocationLat");
+      const userLng = localStorage.getItem("userLocationLon");
+      if (userLat && userLng && lat && lng) {
+        const R = 6371;
+        const dLat = (lat - parseFloat(userLat)) * Math.PI / 180;
+        const dLng = (lng - parseFloat(userLng)) * Math.PI / 180;
+        const a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(parseFloat(userLat) * Math.PI / 180) * Math.cos(lat * Math.PI / 180) * Math.sin(dLng/2) * Math.sin(dLng/2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        distanceKm = (R * c).toFixed(2);
+      }
+      // Open status
+      const isOpenNow = doctor.currentOpeningHours?.openNow;
+      const openStatus = isOpenNow === true
+        ? `<span class="open-now">Open Now</span>`
+        : isOpenNow === false
+          ? `<span class="closed-now">Closed</span>`
+          : `<span class="unknown-status">Hours Unknown</span>`;
+      // Always use the same markup as hospital card
       const card = document.createElement('div');
-      card.className = 'doctor-card';
-      card.dataset.id = doctor.id;
-      
+      card.className = 'hospital-card';
       card.innerHTML = `
-        <div class="doctor-image" style="background-image: url('${doctor.image}')">
-          <span class="doctor-specialty">${doctor.specialty}</span>
-          ${getConsultationBadge(doctor.consultationType)}
-        </div>
-        <div class="doctor-info">
-          <h3 class="doctor-name">${doctor.name}</h3>
-          <p class="doctor-qualification">${doctor.qualification}</p>
-          <div class="doctor-rating">
-            ${generateRatingStars(doctor.rating)}
-            <span class="review-count">${doctor.reviews} reviews</span>
-          </div>
-          <div class="doctor-available">
-            <i class="fas fa-calendar-check"></i>
-            <span>${doctor.availability}</span>
-          </div>
-          <div class="doctor-location">
-            <i class="fas fa-map-marker-alt"></i>
-            <span>${doctor.location}</span>
-          </div>
-          <div class="doctor-actions">
-            <button class="view-profile">
-              <i class="fas fa-user-circle"></i> Profile
-            </button>
-            <button class="book-now">
-              <i class="fas fa-calendar-plus"></i> Book
-            </button>
+        <span class="hospital-badge">Doctor</span>
+        <div class="hospital-image" style="background-image: url('${photoUrl}')"></div>
+        <div class="hospital-info">
+          <h3 class="hospital-name">${name}</h3>
+          <div class="hospital-meta">
+            <div class="hospital-distance">
+              <i class="fas fa-location-arrow"></i>
+              ${lat && lng ? `<a href="https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}" target="_blank" class="distance-link">${distanceKm} km away</a>` : 'Unknown'}
+            </div>
+            <div class="hospital-rating"><i class="fas fa-star"></i> ${rating}</div>
+            <div class="hospital-address"><i class="fas fa-map-marker-alt"></i> ${address}</div>
+            <div class="hospital-phone"><i class="fas fa-phone-alt"></i> ${phone}</div>
+            <div class="hospital-status">${openStatus}</div>
           </div>
         </div>
+      </div>
       `;
-      
       return card;
     },
 
