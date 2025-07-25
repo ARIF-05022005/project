@@ -83,6 +83,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const uc = await signInWithEmailAndPassword(auth, email, password);
         const token = await uc.user.getIdToken();
         localStorage.setItem('token', token);
+        // Clear previous location after login
+        localStorage.removeItem("userLocationLat");
+        localStorage.removeItem("userLocationLon");
+        localStorage.removeItem("userLocationAddress");
         msg.textContent = "✅ Login successful! Redirecting…";
         setTimeout(() => window.location.href = 'indexMainpage.html', 1500);
       } catch (err) {
@@ -107,6 +111,10 @@ document.addEventListener('DOMContentLoaded', () => {
           body: JSON.stringify({ email: user.email, username: user.displayName || user.email })
         });
         localStorage.setItem('token', token);
+        // Clear previous location after login
+        localStorage.removeItem("userLocationLat");
+        localStorage.removeItem("userLocationLon");
+        localStorage.removeItem("userLocationAddress");
         window.location.href = 'indexMainpage.html';
       } catch (err) {
         alert("❌ Google sign-in failed: " + err.message);
@@ -135,6 +143,10 @@ document.addEventListener('DOMContentLoaded', () => {
           body: JSON.stringify({ username: user.phoneNumber })
         });
         localStorage.setItem('token', token);
+        // Clear previous location after login
+        localStorage.removeItem("userLocationLat");
+        localStorage.removeItem("userLocationLon");
+        localStorage.removeItem("userLocationAddress");
         window.location.href = 'indexMainpage.html';
       } catch (err) {
         alert("❌ Phone sign-in failed: " + err.message);
@@ -150,7 +162,12 @@ document.addEventListener('DOMContentLoaded', () => {
         loginDiv.textContent = 'Log Out';
         loginDiv.onclick = async () => {
           await signOut(auth);
-          localStorage.clear();
+          // Remove only location and auth-related data
+          localStorage.removeItem("userLocationLat");
+          localStorage.removeItem("userLocationLon");
+          localStorage.removeItem("userLocationAddress");
+          localStorage.removeItem("token");
+          localStorage.removeItem("locationReturnUrl");
           window.location.href = 'login.html';
         };
       } else {

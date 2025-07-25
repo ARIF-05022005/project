@@ -32,9 +32,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 await saveLocation(address, lat, lon);
 
-                localStorage.setItem("userLocationAddress", address);
-                localStorage.setItem("userLocationLat", lat);
-                localStorage.setItem("userLocationLon", lon);
+                // Only set location if logged in
+                if (localStorage.getItem('token')) {
+                  localStorage.setItem("userLocationAddress", address);
+                  localStorage.setItem("userLocationLat", lat);
+                  localStorage.setItem("userLocationLon", lon);
+                }
 
                 // Redirect back to the page you came from
                 const returnUrl = localStorage.getItem("locationReturnUrl") || "../indexMainpage.html";
@@ -86,9 +89,11 @@ function initAutocomplete() {
 
     await saveLocation(address, lat, lon);
 
-    localStorage.setItem("userLocationAddress", address);
-    localStorage.setItem("userLocationLat", lat);
-    localStorage.setItem("userLocationLon", lon);
+    if (localStorage.getItem('token')) {
+      localStorage.setItem("userLocationAddress", address);
+      localStorage.setItem("userLocationLat", lat);
+      localStorage.setItem("userLocationLon", lon);
+    }
 
     // Redirect back to the page you came from
     const returnUrl = localStorage.getItem("locationReturnUrl") || "../indexMainpage.html";
